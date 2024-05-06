@@ -14,10 +14,7 @@ use App\Http\Controllers\ViewsController;
 |
 */
 
-Route::get('/', function () {
-    return view('user.index');
-})->name('index');
-
+Route::get('/',[ViewsController::class, 'index'])->name('index');
 Route::get('about-us',[ViewsController::class, 'aboutUs'])->name('about-us');
 Route::get('contact-us',[ViewsController::class, 'contactUs'])->name('contact-us');
 Route::get('services',[ViewsController::class, 'services'])->name('services');
