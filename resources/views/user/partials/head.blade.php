@@ -19,4 +19,13 @@
 
     <link rel="stylesheet" href="{{asset('css/flaticon.css')}}">
     <link rel="stylesheet" href="{{asset('css/style.css')}}">
+
+    <link href="http://fonts.googleapis.com/css?family=Playfair+Display:900" rel="stylesheet" type="text/css" />
+    <link href="http://fonts.googleapis.com/css?family=Alice:400,700" rel="stylesheet" type="text/css" />
+  
+    <!-- Bootstrap -->
+    {{-- <link type="text/css" rel="stylesheet" href="{{asset('roomForm/css/bootstrap.min.css')}}" /> --}}
+  
+    <!-- Custom stlylesheet -->
+    <link type="text/css" rel="stylesheet" href="{{asset('roomForm/css/style.css')}}" />
   </head>

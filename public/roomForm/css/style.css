@@ -1,0 +1,251 @@
+.section {
+    position: relative;
+    height: 100vh;
+}
+
+.section .section-center {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    transform: translateY(-50%);
+}
+
+#bookingModal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    display: none;
+}
+
+#booking {
+    font-family: 'Alice', serif;
+    background: rgba(25, 13, 1, 0.33);
+}
+
+.booking-form {
+	height: 480px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 1000px;
+    width: 100%;
+    margin: auto;
+    background: #fff;
+    border-radius: 6px;
+    box-shadow: 0px 5px 10px -5px rgba(0, 0, 0, 0.1);
+}
+
+.booking-form .details-bg {
+    position: absolute;
+    left: 100px;
+    top: -25px;
+    bottom: -25px;
+    width: 400px;
+    background-image: url('../img/background.jpg');
+    background-size: cover;
+    background-position: center;
+    padding: 25px;
+    border-radius: 6px;
+    box-shadow: 0px 5px 10px -5px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.booking-form .gallery-bg {
+    position: absolute;
+    left: 100px;
+    top: -25px;
+    bottom: -25px;
+    width: 400px;
+    background-color: #856849;
+    background-size: cover;
+    background-position: center;
+    padding: 25px;
+    border-radius: 6px;
+    box-shadow: 0px 5px 10px -5px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.booking-form .details-bg::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    background: rgba(133, 104, 73, 0.78);
+}
+
+.booking-form>form {
+    margin-left: 500px;
+    margin-top: -150px; /* Adjust this value as needed */
+    padding: 30px;
+}
+
+
+.booking-form .form-header {
+    margin-bottom: 30px;
+    margin-top: 60px;
+    position: relative;
+    z-index: 20;
+}
+
+.booking-form .form-header h2 {
+    font-family: 'Playfair Display', serif;
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-weight: 900;
+    color: #fff;
+    font-size: 42px;
+    text-transform: capitalize;
+}
+
+.booking-form .form-header p {
+    color: #fff;
+    font-size: 18px;
+}
+
+.booking-form .form-group {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.booking-form .form-control {
+    background-color: #fff;
+    height: 45px;
+    padding: 0px 15px;
+    color: #151515;
+    border: 1px solid #a07445;
+    font-size: 15px;
+    font-weight: 500;
+    box-shadow: none;
+    border-radius: 40px;
+    transition: background-color 0.2s ease;
+}
+
+.booking-form .form-control::placeholder {
+    color: #e5e5e5;
+}
+
+.booking-form .form-control:focus {
+    background: #f8f8f8;
+}
+
+.booking-form .select-wrapper {
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+}
+
+.booking-form .select-wrapper select {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding: 0 10px;
+    font-size: 15px;
+    color: #151515;
+}
+
+.booking-form .select-wrapper::before {
+    content: '\25BC';
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    padding: 0 10px;
+    line-height: 45px;
+    color: #a07445;
+    font-size: 15px;
+    pointer-events: none;
+}
+
+.booking-form .select-wrapper select:focus +::before {
+    color: #856849;
+}
+
+.booking-form .select-wrapper select:hover +::before {
+    color: #856849;
+}
+
+.booking-form .form-btn {
+    margin-top: 30px;
+}
+
+.booking-form .submit-btn {
+    display: block;
+    width: 100%;
+    color: #fff;
+    background-color: rgba(133, 104, 73, 0.9);
+    font-weight: 700;
+    font-size: 18px;
+    border: none;
+    border-radius: 40px;
+    height: 50px;
+    transition: background-color 0.2s ease;
+}
+
+.booking-form .submit-btn:hover,
+.booking-form .submit-btn:focus {
+    background-color: rgba(133, 104, 73, 1);
+}
+
+.form-img img {
+    width: 90px;
+    height: 60px;
+    margin-top: 10px;
+    margin-left: 5px;
+    display: block;
+}
+
+.form-img img:hover {
+    transform: scale(1.1);
+}
+
+.form-img img.selected {
+    border: 2px solid #856849;
+}
+
+.form-control::-webkit-inner-spin-button,
+.form-control::-webkit-outer-spin-button {
+    appearance: none;
+    margin: 0; /* Optional: You can adjust the margin as needed */
+}
+
+
+/* new/ */
+.input-with-dropdown {
+    position: relative;
+    /* display: inline-block; */
+}
+
+.dropdown {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50px; /* Adjust based on your needs */
+    height: 100%;
+}
+
+.time-select {
+    width: 100%;
+    height: 100%;
+    appearance: none; /* Remove default styling */
+    -webkit-appearance: none; /* For Safari */
+    -moz-appearance: none; /* For Firefox */
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.time-select:focus {
+    outline: none;
+}

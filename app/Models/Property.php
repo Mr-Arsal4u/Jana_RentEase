@@ -15,7 +15,7 @@ class Property extends Model
     {
         return $this->hasMany(Booking::class);
     }
-    
+
     public function renter()
     {
         return $this->belongsTo(User::class, 'renter_id');
@@ -24,5 +24,10 @@ class Property extends Model
     public function images()
     {
         return $this->hasMany(Image::class);
-    }   
+    }
+
+    public function amount()
+    {
+       return $this->hasOne(Amount::class);
+    }
 }

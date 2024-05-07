@@ -24,7 +24,7 @@ class CreateBookingsTable extends Migration
             $table->string('adults');
             $table->string('children');
             $table->string('email');
-            $table->string('total_price');
+            // $table->string('total_price');
             $table->string('status')->default('Pending');
             $table->time('arrival_time')->nullable();
             // $table->string('payment_status')->default('Pending');

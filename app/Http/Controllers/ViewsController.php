@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Property;
 use Illuminate\Http\Request;
 
 class ViewsController extends Controller
@@ -10,7 +11,7 @@ class ViewsController extends Controller
     {
         return view('user.index');
     }
-    
+
     public function aboutUs()
     {
         return view('user.about');
@@ -26,10 +27,23 @@ class ViewsController extends Controller
         return view('user.services');
     }
 
-    public function rooms()
+    public function rooms($type = null)
     {
-        return view('user.rooms');
+        // dd($type);
+        if ($type) {
+            // $properties = Property::with('images')->latest()->get();
+            $properties = Property::whereHas('amount', function ($query) use ($type) {
+                $query->where('type', '=', $type);
+            })->with(['images', 'amount'])->get();
+            // dd($properties);
+        } else {
+            $properties = Property::with(['images','amountTypes'])->latest()->get();
+        }
+        // $properties = Property::where('type',$type)->with('images')->latest()->get();
+        // dd($properties);
+        return view('user.rooms', compact('properties'));
     }
+
 
     public function roomDetails()
     {
@@ -45,6 +59,4 @@ class ViewsController extends Controller
     {
         return view('user.blog-details');
     }
-
-    
 }

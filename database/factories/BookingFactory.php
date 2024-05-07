@@ -23,7 +23,6 @@ class BookingFactory extends Factory
             'adults' => $this->faker->randomDigit(),
             'children' => $this->faker->randomDigit(),
             'email' => $this->faker->email(),
-            'total_price' => $this->faker->randomNumber(4),
             'status' => $this->faker->randomElement(['Pending', 'Approved', 'Declined']),
             'arrival_time' => $this->faker->time(),
             'renter_id' => User::inRandomOrder()->value('id'),

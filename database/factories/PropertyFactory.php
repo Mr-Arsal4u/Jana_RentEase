@@ -17,14 +17,12 @@ class PropertyFactory extends Factory
         return [
             'property_name' => $this->faker->name(),
             'location' => $this->faker->address(),
-            'price' => $this->faker->randomNumber(4),
             'bedrooms' => $this->faker->randomDigit(),
             'bathrooms' => $this->faker->randomDigit(),
             'garages' => $this->faker->randomDigit(),
             'area' => $this->faker->randomDigit(),
             'description' => $this->faker->text(),
             'status' => 'Available',
-            'type' => $this->faker->randomElement(['Apartment', 'House',]),
             'max_persons' => $this->faker->randomDigit(),
             'rating' => $this->faker->randomDigit(),
             'view_side' => $this->faker->randomElement(['Sea', 'Mountain', 'City']),
@@ -32,7 +30,6 @@ class PropertyFactory extends Factory
             'floors' => $this->faker->randomDigit(),
             'kitchen' => $this->faker->randomDigit(),
             'renter_id' => User::inRandomOrder()->value('id'),
-
         ];
     }
 }
