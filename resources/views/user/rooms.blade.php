@@ -21,7 +21,7 @@
         <div class="container-fluid px-md-0">
             <div class="row no-gutters">
                 @foreach ($properties as $property)
-                    <div class="col-lg-6">
+                    <div class="col-lg-6 mb-4 mt-4">
                         <div class="room-wrap d-md-flex">
                             <a href="#" class="img"
                                 style="background-image: url('{{ asset('images/room-1.jpg') }}');"></a>
@@ -50,7 +50,7 @@
                                         <li><span>Bed:</span> {{ $property->bed }}</li>
                                     </ul>
                                     <p class="pt-1">
-                                        <a href="#" onclick="showModal()" data-property-id="{{ $property->id }}"
+                                        <a href="#" id="propertySelect" onclick="bookingDates({{ $property->id }})" data-property-id="{{ $property->id }}"
                                             class="btn-custom px-3 py-2 view-room-details">
                                             View Room Details <span class="icon-long-arrow-right"></span>
                                         </a>
@@ -114,13 +114,13 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <span class="form-label">Check In</span>
-                                        <input class="form-control" name="check_in" type="date" required>
+                                        <input class="form-control" name="check_in" placeholder="Select Check In date" type="text" id="check_in_date" required>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <span class="form-label">Check Out</span>
-                                        <input class="form-control" name="check_out" type="date" required>
+                                        <input class="form-control" name="check_out"  id="check_out_date" type="text" required>
                                     </div>
                                 </div>
                             </div>
@@ -143,12 +143,13 @@
                             <div class="form-group">
                                 <span class="form-label">Arrival Time</span>
                                 <div class="input-with-dropdown">
-                                    <input type="number" class="form-control" name="arrival_time" maxlength="2" oninput="validateTime(this)">
-                                    <div class="dropdown">
-                                      <select name="period" class="time-select">
-                                        <option value="AM">AM</option>
-                                        <option value="PM">PM</option>
-                                      </select>
+                                    <input type="number" class="form-control" name="arrival_time" maxlength="2"
+                                        oninput="validateTime(this)">
+                                    <div class="dropdowns">
+                                        <select name="period" class="time-select">
+                                            <option value="AM">AM</option>
+                                            <option value="PM">PM</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -162,3 +163,5 @@
         </div>
     </div>
 @endsection
+
+

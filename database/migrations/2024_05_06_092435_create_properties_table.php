@@ -15,23 +15,16 @@ class CreatePropertiesTable extends Migration
     {
         Schema::create('properties', function (Blueprint $table) {
             $table->id();
+            $table->foreign('user_id')->references('id')->on('owners')->onDelete('cascade')->name('properties_owner_id_foreign');
             $table->string('property_name');
             $table->string('location');
             $table->string('bedrooms');
             $table->string('bathrooms');
-            $table->string('garages')->nullable();
             $table->string('area');
-            $table->string('description');
-            $table->string('status')->default('Available');
+            $table->text('description')->nullable();
+            $table->enum('status', ['Available', 'Booked', 'Unavailable'])->default('Available');;
             $table->string('max_persons');
-            $table->string('rating');
             $table->string('view_side');
-            $table->string('bed');
-            $table->string('floors');
-            $table->string('kitchen');
-            // $table->string('slab_type');
-            $table->foreignId('renter_id')->constrained('users')->onDelete('cascade')->nullable();
-            // $table->foreignId('booking_id')->constrained('bookings')->onDelete('cascade')->nullable();
             $table->timestamps();
         });
     }

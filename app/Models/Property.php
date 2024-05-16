@@ -16,18 +16,45 @@ class Property extends Model
         return $this->hasMany(Booking::class);
     }
 
-    public function renter()
-    {
-        return $this->belongsTo(User::class, 'renter_id');
-    }
-
     public function images()
     {
         return $this->hasMany(Image::class);
     }
-
-    public function amount()
+    public function amenities()
     {
-       return $this->hasOne(Amount::class);
+        return $this->belongsToMany(Amenity::class);
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    public function renter()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function owner()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function scopeSearch($query, $s)
+    {
+        return $query->where('name', 'like', '%' . $s . '%')
+            ->orWhere('description', 'like', '%' . $s . '%')
+            ->orWhere('address', 'like', '%' . $s . '%')
+            ->orWhere('city', 'like', '%' . $s . '%')
+            ->orWhere('state', 'like', '%' . $s . '%')
+            ->orWhere('zip', 'like', '%' . $s . '%')
+            ->orWhere('price', 'like', '%' . $s . '%');
+    }
+
+    public function scopeFilter($query, $filters)
+    {
+        if ($filters['search'] ?? false) {
+            $query->search($filters['search']);
+        }
     }
 }

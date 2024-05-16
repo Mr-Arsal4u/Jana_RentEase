@@ -14,7 +14,7 @@
                                 class="fa fa-twitter"><i class="sr-only">Twitter</i></span></a>
                         <a href="#" class="d-flex align-items-center justify-content-center"><span
                                 class="fa fa-instagram"><i class="sr-only">Instagram</i></span></a>
-                        <a href="#" class="d-flex align-items-center justify-content-center"><span
+                          <a href="#" class="d-flex align-items-center justify-content-center"><span
                                 class="fa fa-dribbble"><i class="sr-only">Dribbble</i></span></a>
                     </p>
                 </div>
@@ -40,7 +40,7 @@
                 <li class="nav-item{{ request()->routeIs('services') ? ' active' : '' }}">
                     <a href="{{ route('services') }}" class="nav-link">Services</a>
                 </li>
-                <li class="nav-item dropdown">
+                {{-- <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle {{ request()->is('property-listings/*') ? ' active' : '' }}"
                         href="#" id="propertiesDropdown" role="button" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
@@ -53,8 +53,21 @@
                         <a class="dropdown-item {{ request()->is('property-listings/house') ? 'active' : '' }}"
                             href="{{ route('rooms', 'house') }}">Houses</a>
                     </div>
-                </li>
+                </li> --}}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle {{ request()->is('property-listings/*') ? ' active' : '' }}"
+                        href="#" id="propertiesDropdown" role="button" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                            Properties
+                    </a>    
 
+                    <div class="dropdown-menu" aria-labelledby="propertiesDropdown">
+                        <a class="dropdown-item {{ request()->is('property-listings/apartment') ? 'active' : '' }}"
+                            href="{{ route('rooms', 'apartment') }}">Apartment Rooms</a>
+                        <a class="dropdown-item {{ request()->is('property-listings/house') ? 'active' : '' }}"
+                            href="{{ route('rooms', 'house') }}">Houses</a>
+                    </div>
+                </li>
                 <li class="nav-item{{ request()->routeIs('blog') ? ' active' : '' }}">
                     <a href="{{ route('blog') }}" class="nav-link">Blog</a>
                 </li>

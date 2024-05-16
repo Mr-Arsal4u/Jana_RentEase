@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Booking;
+use App\Models\Renter;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -29,7 +31,7 @@ class PropertyFactory extends Factory
             'bed' => $this->faker->randomElement(['Single', 'Double', 'King', 'Queen']),
             'floors' => $this->faker->randomDigit(),
             'kitchen' => $this->faker->randomDigit(),
-            'renter_id' => User::inRandomOrder()->value('id'),
+            // 'booking_id' => Booking::inRandomOrder()->value('id'),
         ];
     }
 }

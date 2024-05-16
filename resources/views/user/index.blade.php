@@ -1,9 +1,6 @@
 @extends('user.layouts.master')
 @section('content')
-		
-
-    <div class="hero-wrap js-fullheight" style="background-image: url('images/bg_1.jpg');"
-        data-stellar-background-ratio="0.5">
+    <div class="hero-wrap js-fullheight" style="background-image: url('images/bg_1.jpg');" data-stellar-background-ratio="0.5">
         <div class="overlay"></div>
         <div class="container">
             <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-start"
@@ -11,7 +8,7 @@
                 <div class="col-md-7 ftco-animate">
                     <h2 class="subheading">Welcome to JANA Rent Ease</h2>
                     <h1 class="mb-4">Rent an appartment for your vacation</h1>
-                    <p><a href="#" class="btn btn-primary">Learn more</a> <a href="#"
+                    <p><a href="{{route('owner.login')}}" class="btn btn-primary">List Your Property</a> <a href="#"
                             class="btn btn-white">Contact us</a></p>
                 </div>
             </div>
@@ -20,22 +17,23 @@
 
     <section class="ftco-section ftco-book ftco-no-pt ftco-no-pb">
         <div class="container">
-            <div class="row justify-content-end">
-                <div class="col-lg-4">
+            <div class="row justify-content-end ml-5">
+                <div class="col-lg-6">
                     <form action="#" class="appointment-form">
-                        <h3 class="mb-3">Book your apartment</h3>
+                        <h3 class="mb-3">Please Enter Your Details</h3>
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <input type="text" class="form-control" placeholder="Full Name">
+                                    <input type="text" id="renter_name" class="form-control" placeholder="Full Name"
+                                        required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <div class="input-wrap">
                                         <div class="icon"><span class="ion-md-calendar"></span></div>
-                                        <input type="text" class="form-control appointment_date-check-in"
-                                            placeholder="Check-In">
+                                        <input type="text" class="form-control" id="check-in" placeholder="Check-In"
+                                            required>
                                     </div>
                                 </div>
                             </div>
@@ -43,8 +41,8 @@
                                 <div class="form-group">
                                     <div class="input-wrap">
                                         <div class="icon"><span class="ion-md-calendar"></span></div>
-                                        <input type="text" class="form-control appointment_date-check-out"
-                                            placeholder="Check-Out">
+                                        <input type="text" class="form-control" id="check-out" placeholder="Check-Out"
+                                            required>
                                     </div>
                                 </div>
                             </div>
@@ -52,15 +50,8 @@
                                 <div class="form-group">
                                     <div class="form-field">
                                         <div class="select-wrap">
-                                            <div class="icon"><span class="fa fa-chevron-down"></span></div>
-                                            <select name="" id="" class="form-control">
-                                                <option value="">Adults</option>
-                                                <option value="">1</option>
-                                                <option value="">2</option>
-                                                <option value="">3</option>
-                                                <option value="">4</option>
-                                                <option value="">5</option>
-                                            </select>
+                                            <input type="number" class="form-control" name="adults" id="adults"
+                                                placeholder="Adults" required>
                                         </div>
                                     </div>
                                 </div>
@@ -69,37 +60,30 @@
                                 <div class="form-group">
                                     <div class="form-field">
                                         <div class="select-wrap">
-                                            <div class="icon"><span class="fa fa-chevron-down"></span></div>
-                                            <select name="" id="" class="form-control">
-                                                <option value="">Children</option>
-                                                <option value="">1</option>
-                                                <option value="">2</option>
-                                                <option value="">3</option>
-                                                <option value="">4</option>
-                                                <option value="">5</option>
-                                            </select>
+                                            <input type="number" class="form-control" name="children" id="children"
+                                                placeholder="Children" required>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <input type="text" class="form-control" placeholder="Phone number">
+                                    <input type="email" class="form-control" name="renter_email" id="renter_email"
+                                        placeholder="Email" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <div class="input-wrap">
                                         <div class="icon"><span class="ion-ios-clock"></span></div>
-                                        <input type="text" class="form-control appointment_time"
-                                            placeholder="Time">
+                                        <input type="text" class="form-control appointment_time" placeholder="Time"
+                                            id="time" required>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <input type="submit" value="Book Appartment Now"
-                                        class="btn btn-primary py-3 px-4">
+                                    <button id="slide-button" class="btn btn-primary py-3 px-4">Book Apartment Now</button>
                                 </div>
                             </div>
                         </div>
@@ -108,6 +92,7 @@
             </div>
         </div>
     </section>
+
 
     <section class="ftco-section ftco-services">
         <div class="container">
@@ -149,7 +134,7 @@
         </div>
     </section>
 
-    <section class="ftco-section bg-light">
+    <section style="display: none" id="apartment-section" class="ftco-section bg-light">
         <div class="container-fluid px-md-0">
             <div class="row no-gutters justify-content-center pb-5 mb-3">
                 <div class="col-md-7 heading-section text-center ftco-animate">
@@ -173,81 +158,14 @@
                                     <li><span>View:</span> Sea View</li>
                                     <li><span>Bed:</span> 1</li>
                                 </ul>
-                                <p class="pt-1"><a href="room-single.html" class="btn-custom px-3 py-2">View Room
-                                        Details <span class="icon-long-arrow-right"></span></a></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="room-wrap d-md-flex">
-                        <a href="#" class="img" style="background-image: url(images/room-2.jpg);"></a>
-                        <div class="half left-arrow d-flex align-items-center">
-                            <div class="text p-4 p-xl-5 text-center">
-                                <p class="star mb-0"><span class="fa fa-star"></span><span
-                                        class="fa fa-star"></span><span class="fa fa-star"></span><span
-                                        class="fa fa-star"></span><span class="fa fa-star"></span></p>
-                                <!-- <p class="mb-0"><span class="price mr-1">$120.00</span> <span class="per">per night</span></p> -->
-                                <h3 class="mb-3"><a href="rooms.html">Standard Room</a></h3>
-                                <ul class="list-accomodation">
-                                    <li><span>Max:</span> 3 Persons</li>
-                                    <li><span>Size:</span> 45 m2</li>
-                                    <li><span>View:</span> Sea View</li>
-                                    <li><span>Bed:</span> 1</li>
-                                </ul>
-                                <p class="pt-1"><a href="room-single.html" class="btn-custom px-3 py-2">View Room
+                                <p class="pt-1"><a id="book_apartment" onclick="bookProperty('2')"
+                                        class="btn-custom px-3 py-2">View Room
                                         Details <span class="icon-long-arrow-right"></span></a></p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-lg-6">
-                    <div class="room-wrap d-md-flex">
-                        <a href="#" class="img order-md-last"
-                            style="background-image: url(images/room-3.jpg);"></a>
-                        <div class="half right-arrow d-flex align-items-center">
-                            <div class="text p-4 p-xl-5 text-center">
-                                <p class="star mb-0"><span class="fa fa-star"></span><span
-                                        class="fa fa-star"></span><span class="fa fa-star"></span><span
-                                        class="fa fa-star"></span><span class="fa fa-star"></span></p>
-                                <!-- <p class="mb-0"><span class="price mr-1">$120.00</span> <span class="per">per night</span></p> -->
-                                <h3 class="mb-3"><a href="rooms.html">Family Room</a></h3>
-                                <ul class="list-accomodation">
-                                    <li><span>Max:</span> 3 Persons</li>
-                                    <li><span>Size:</span> 45 m2</li>
-                                    <li><span>View:</span> Sea View</li>
-                                    <li><span>Bed:</span> 1</li>
-                                </ul>
-                                <p class="pt-1"><a href="room-single.html" class="btn-custom px-3 py-2">View Room
-                                        Details <span class="icon-long-arrow-right"></span></a></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="room-wrap d-md-flex">
-                        <a href="#" class="img order-md-last"
-                            style="background-image: url(images/room-4.jpg);"></a>
-                        <div class="half right-arrow d-flex align-items-center">
-                            <div class="text p-4 p-xl-5 text-center">
-                                <p class="star mb-0"><span class="fa fa-star"></span><span
-                                        class="fa fa-star"></span><span class="fa fa-star"></span><span
-                                        class="fa fa-star"></span><span class="fa fa-star"></span></p>
-                                <!-- <p class="mb-0"><span class="price mr-1">$120.00</span> <span class="per">per night</span></p> -->
-                                <h3 class="mb-3"><a href="rooms.html">Deluxe Room</a></h3>
-                                <ul class="list-accomodation">
-                                    <li><span>Max:</span> 3 Persons</li>
-                                    <li><span>Size:</span> 45 m2</li>
-                                    <li><span>View:</span> Sea View</li>
-                                    <li><span>Bed:</span> 1</li>
-                                </ul>
-                                <p class="pt-1"><a href="room-single.html" class="btn-custom px-3 py-2">View Room
-                                        Details <span class="icon-long-arrow-right"></span></a></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </section>
@@ -460,8 +378,8 @@
                     <h2>Ready to get started</h2>
                     <p class="mb-4">It’s safe to book online with us! Get your dream stay in clicks or drop us a line
                         with your questions.</p>
-                    <p class="mb-0"><a href="#" class="btn btn-primary px-4 py-3">Book now</a> <a
-                            href="#" class="btn btn-white px-4 py-3">Contact us</a></p>
+                    <p class="mb-0"><a href="#" class="btn btn-primary px-4 py-3">Book now</a> <a href="#"
+                            class="btn btn-white px-4 py-3">Contact us</a></p>
                 </div>
             </div>
         </div>
@@ -536,7 +454,4 @@
             </div>
         </div>
     </section>
-
 @endsection
-
-   
