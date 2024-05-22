@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\Admin\PropertyController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\PropertiesController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ViewsController;
+use Spatie\Permission\Contracts\Role;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,4 +38,13 @@ Route::get('owner/login',[OwnerController::class,'loginPage'])->name('owner.logi
 Route::get('admin-dashboard',[OwnerController::class,'adminDashboard'])->name('admin.dashboard');
 Route::get('owner-dashboard',[OwnerController::class,'ownerDashboard'])->name('owner.dashboard');
 
+// Route::get('owner/properties',[PropertiesController::class,'getOwnerProperties'])->name('owner.properties');
 
+
+Route::get('all-properties', [PropertyController::class, 'index'])->name('properties');
+Route::post('add-property', [PropertyController::class, 'saveProperty'])->name('property.save');
+
+// Route::get('add-amenities', [PropertyController::class, 'addAmnities'])->name('amenities.add');
+Route::post('add-amenities', [PropertyController::class, 'saveAmenities'])->name('amenities.save');
+Route::get('edit-amenities/{id}', [PropertyController::class, 'editAmenities'])->name('amenities.edit');
+Route::get('amenities', [PropertyController::class, 'getAmenities'])->name('amenities');

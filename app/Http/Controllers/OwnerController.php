@@ -9,7 +9,7 @@ class OwnerController extends Controller
     public function ownerDashboard()
     {
         // auth()->checkRole('owner');
-        return view('owner.index');
+        return view('admin.index');
     }
 
     public function loginPage()
