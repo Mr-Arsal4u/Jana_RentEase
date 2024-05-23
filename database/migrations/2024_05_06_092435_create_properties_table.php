@@ -15,16 +15,21 @@ class CreatePropertiesTable extends Migration
     {
         Schema::create('properties', function (Blueprint $table) {
             $table->id();
-            $table->foreign('user_id')->references('id')->on('owners')->onDelete('cascade')->name('properties_owner_id_foreign');
-            $table->string('property_name');
-            $table->string('location');
-            $table->string('bedrooms');
-            $table->string('bathrooms');
-            $table->string('area');
+            $table->foreign('user_id')->references('id')->on('owners')->onDelete('cascade')->name('properties_owner_id_foreign')->nullable();
+            $table->string('property_no')->nullable();
+            $table->string('property_name')->nullable();
+            $table->string('location')->nullable();
+            $table->string('bedrooms')->nullable();
+            $table->string('bathrooms')->nullable();
+            $table->string('area')->nullable();
             $table->text('description')->nullable();
-            $table->enum('status', ['Available', 'Booked', 'Unavailable'])->default('Available');;
-            $table->string('max_persons');
-            $table->string('view_side');
+            $table->string('application_status')->nullable();
+            $table->boolean('status')->default(1)->nullable();
+            $table->string('max_persons')->nullable();
+            $table->string('view_side')->nullable();
+            $table->string('city')->nullable();
+            $table->string('zip_code')->nullable();
+            $table->string('country')->nullable();
             $table->timestamps();
         });
     }
