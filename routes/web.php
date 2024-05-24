@@ -1,6 +1,7 @@
 <?php
 
 use App\Helpers\GeneralHelper;
+use App\Http\Controllers\admin\CurrencyController;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Contracts\Role;
 use App\Http\Controllers\OwnerController;
@@ -53,4 +54,8 @@ Route::post('property-amenities', [PropertyController::class, 'savePropertyAmeni
 Route::post('add-amenities', [PropertyController::class, 'saveAmenities'])->name('amenities.save');
 Route::get('edit-amenities/{id}', [PropertyController::class, 'editAmenities'])->name('amenities.edit');
 Route::get('amenities', [PropertyController::class, 'getAmenities'])->name('amenities');
-Route::get('property-images', [PropertyController::class, 'savePropertyImages'])->name('property.images');
+Route::post('property-images', [PropertyController::class, 'savePropertyImages'])->name('property.images');
+Route::get('get-fee', [PropertyController::class, 'getFee'])->name('get.fee');
+Route::post('submit-application', [PropertyController::class, 'submitApplication'])->name('submit.application');
+Route::get('currency', [CurrencyController::class, 'index'])->name('currency');
+Route::post('save-currency', [CurrencyController::class, 'save'])->name('currency.save');

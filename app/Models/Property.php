@@ -57,4 +57,16 @@ class Property extends Model
             $query->search($filters['search']);
         }
     }
+
+    public function scopeFilterByAmenities($query, $amenities)
+    {
+        $query->whereHas('amenities', function ($query) use ($amenities) {
+            $query->whereIn('amenity_id', $amenities);
+        });
+    }
+
+    public function PropertyAmount()
+    {
+        return $this->hasMany(PropertyAmount::class);
+    }
 }

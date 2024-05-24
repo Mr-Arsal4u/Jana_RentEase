@@ -13,6 +13,11 @@
                 </a>
             </li>
             <li>
+                <a href="{{ route('currency') }}" aria-expanded="false">
+                    <i class="icon-badge menu-icon"></i><span class="nav-text">Currency</span>
+                </a>
+            </li>
+            <li>
                 <a href="{{ route('amenities') }}" aria-expanded="false">
                     <i class="icon-badge menu-icon"></i><span class="nav-text">Amenities</span>
                 </a>
@@ -26,8 +31,8 @@
                     <li><a href="layout-fixed-sidebar.html">Fixed Sidebar</a></li>
                 </ul>
             </li>
-        
-          
+
+
         </ul>
     </div>
 </div>

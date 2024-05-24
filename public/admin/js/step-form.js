@@ -71,7 +71,8 @@ $("#property_info_next").click(function () {
         area: $("#area").val(),
         city: $("#city").val(),
         country: $("#country").val(),
-        step: 1 
+        step: 1,
+        owner_id: $("#owner_id").val(),
     };
     $.ajaxSetup({
         headers: {
@@ -80,7 +81,7 @@ $("#property_info_next").click(function () {
     });
 
     $.ajax({
-        url: "/add-property", 
+        url: "/add-property",
         method: "POST",
         data: formData,
         success: function (response) {
@@ -102,7 +103,7 @@ $("#property_details_next").click(function () {
         description: $("#description").val(),
         max_persons: $("#max_persons").val(),
         view_side: $("#view_side").val(),
-        step: 2 
+        step: 2
 
     };
 
@@ -130,7 +131,7 @@ $("#amenities_next").click(function () {
     let formData = {
         property_no: $("#property_no").val(),
         amenities: selectedAmenities,
-        step: 3 
+        step: 3
     };
     $.ajaxSetup({
         headers: {
@@ -139,7 +140,7 @@ $("#amenities_next").click(function () {
     });
 
     $.ajax({
-        url: "/property-amenities", 
+        url: "/property-amenities",
         method: "POST",
         data: formData,
         success: function (response) {
@@ -159,7 +160,7 @@ $("#documents_next").click(function (e) {
     formData.append('property_no', $("#property_no").val());
 
     $.ajax({
-        url: '/property-images', 
+        url: '/property-images',
         type: 'POST',
         data: formData,
         contentType: false,
@@ -175,41 +176,96 @@ $("#documents_next").click(function (e) {
 });
 
 $("#submitBtn").click(function () {
-    nextPrev(1);
+    var formData = {
+        property_no: $("#property_no").val(),
+        currency: $('input[name="currency"]:checked').val(),
+        amount: $('#desiredAmount').val(),
+        status: 'Complete',
+    };
+
+    $.ajax({
+        url: '/submit-application',
+        type: 'POST',
+        data: formData,
+        dataType: 'json',
+        success: function (response) {
+            console.log(response);
+            // $('#step5').hide();
+            $('#step5').remove();
+            $('#success-container').show();
+        },
+        error: function (error) {
+            console.error('Error:', error);
+        }
+    });
 });
 
 
 $('#imageUpload').on('change', function (event) {
-    const files = event.target.files; // Get selected files
-    const imagePreview = $('#imagePreview'); // Get image preview div
+    const files = event.target.files;
+    const imagePreview = $('#imagePreview');
 
-    // Clear previous preview
     imagePreview.empty();
 
-    // Loop through selected files
     for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        const reader = new FileReader(); // Create a new FileReader object
+        const reader = new FileReader();
 
-        // Function to handle FileReader load event
         reader.onload = function (event) {
-            const imageElement = $('<img>'); // Create img element
-            imageElement.addClass('preview-image'); // Add class for styling
-            imageElement.attr('src', event.target.result); // Set src attribute with file data
+            const imageElement = $('<img>');
+            imageElement.addClass('preview-image');
+            imageElement.attr('src', event.target.result);
             imageElement.css('width', '100px');
             imageElement.css('height', '100px');
             // Set width to 50px
             imageElement.on('click', function () {
                 $(this).remove();
                 // $(this).parent().remove();
-                // Remove image when clicked
             });
-            imagePreview.append(imageElement); // Append img element to preview div
+            imagePreview.append(imageElement);
         };
 
-        // Read file as Data URL
         reader.readAsDataURL(file);
     }
 });
 
+$('input[name="currency"]').change(function () {
+    if ($('input[name="currency"]:checked').length > 0) {
+        $('#amountContainer').show();
+    } else {
+        $('#amountContainer').hide();
+    }
+});
+
+function loadFee() {
+    var amount = $('#desiredAmount').val().trim();
+
+
+    if (amount === '') {
+        // If the amount is empty, remove the contract HTML from the container
+        $('#contract-container').html('');
+        return; // Exit the function
+    }
+
+    $.ajax({
+        url: '/get-fee',
+        type: 'GET',
+        data: {
+            property_no: $('#property_no').val(),
+            currency: $('input[name="currency"]:checked').val(),
+            amount: amount
+        },
+        success: function (data) {
+            console.log(data.contract);
+            // $('#contract-container').remove();
+            $('#contract-container').html(data.contract);
+            // $('#contract-container').html(response.contractHTML);
+
+            console.log(data);
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.error(textStatus, errorThrown);
+        }
+    });
+}
 

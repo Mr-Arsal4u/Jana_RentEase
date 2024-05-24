@@ -9,7 +9,9 @@ use App\Helpers\GeneralHelper;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Models\Image;
+use App\Models\PropertyAmount;
 use App\Services\PropertyService;
+use Generator;
 
 class PropertyController extends Controller
 {
@@ -26,7 +28,8 @@ class PropertyController extends Controller
     {
         $property_no = GeneralHelper::GENERATE_APPLICATION_NUMBER();
         $amenities = $this->propertyService->getAmenities();
-        return view('admin.property.index', compact('property_no', 'amenities'));
+        $currencies = $this->propertyService->getCurrency();
+        return view('admin.property.index', compact('property_no', 'amenities', 'currencies'));
     }
 
     public function getAmenities()
@@ -53,7 +56,11 @@ class PropertyController extends Controller
     {
         // dd($request->all());
         try {
-            $property = Property::where('property_no', $request->property_no)->first();
+            // $property = Property::where('property_no', $request->property_no)->first();
+            // $property = $this->propertyService->getProperties()->where('property_no', $request->property_no);
+            // dd($property);
+            $property = $this->propertyService->getProperties()->where('property_no', $request->property_no)->first();
+
 
             if ($request->step == "1") {
                 $data = $request->except('step');
@@ -82,8 +89,11 @@ class PropertyController extends Controller
     {
         // dd($request->all());
         try {
-            $property = Property::where('property_no', $request->property_no)->first();
-
+            // $property = Property::where('property_no', $request->property_no)->first();
+            // ->where('property_no', $request->property_no)->first()
+            // $property=Property::where('property_no', $request->property_no)->first();
+            $property = $this->propertyService->getProperties()->where('property_no', $request->property_no)->first();
+            // dd($property);
             if ($property) {
                 $property->amenities()->detach();
                 if ($request->has('amenities')) {
@@ -103,7 +113,8 @@ class PropertyController extends Controller
     public function savePropertyImages(Request $request)
     {
         try {
-            $property = Property::where('property_no', $request->property_no)->firstOrFail();
+            // $property = Property::where('property_no', $request->property_no)->firstOrFail();
+            $property = $this->propertyService->getProperties()->where('property_no', $request->property_no)->first();
 
             $property->images()->delete();
 
@@ -124,10 +135,48 @@ class PropertyController extends Controller
     public function payment(Request $request)
     {
         try {
-            $property = Property::where('property_no', $request->property_no)->firstOrFail();
+            // $property = Property::where('property_no', $request->property_no)->firstOrFail();
+            $property = $this->propertyService->getProperties()->where('property_no', $request->property_no)->first();
 
             // $property->update(['status' => 'paid']);
             return response()->json(['status' => 'success', 'message' => 'Payment made successfully']);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+        }
+    }
+
+    public function getFee(Request $request)
+    {
+        // dd($request->all());
+        try {
+            // $property = Property::where('property_no', $request->property_no)->firstOrFail();
+            $property = $this->propertyService->getProperties()->where('property_no', $request->property_no)->first();
+            $fee = GeneralHelper::calculateFee($request->amount);
+            $currency = $this->propertyService->getCurrency()->where('id', $request->currency)->first();
+            $contract = GeneralHelper::applicationContract($property, $fee, $currency->code);
+            return response()->json(['status' => 'success', 'contract' => $contract]);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+        }
+    }
+
+    public function submitApplication(Request $request)
+    {
+        try {
+            $fee = GeneralHelper::calculateFee($request->amount);
+            $currency = $this->propertyService->getCurrency()->where('id', $request->currency)->first();
+            // dd($currency);
+            $property = $this->propertyService->getProperties()->where('property_no', $request->property_no)->first();
+            $property->update(['application_status' => $request->status]);
+            $amount = new PropertyAmount();
+            $amount->property_id = $property->id;
+            $amount->total_amount = $fee['total_amount'];
+            $amount->user_amount = $fee['owner_amount'];
+            $amount->admin_amount = $fee['fee'];
+            $amount->tax = 0.015;
+            $amount->currency_id = $currency->id;
+            $amount->save();
+            return response()->json(['status' => 'success', 'message' => 'Application submitted successfully']);
         } catch (\Exception $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
         }
