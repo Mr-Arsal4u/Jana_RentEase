@@ -8,32 +8,32 @@
                 <div class="col-md-7 ftco-animate">
                     <h2 class="subheading">Welcome to JANA Rent Ease</h2>
                     <h1 class="mb-4">Rent an appartment for your vacation</h1>
-                    <p><a href="{{route('owner.login')}}" class="btn btn-primary">List Your Property</a> <a href="#"
+                    <p><a href="{{ route('owner.login') }}" class="btn btn-primary">List Your Property</a> <a href="#"
                             class="btn btn-white">Contact us</a></p>
                 </div>
             </div>
         </div>
     </div>
 
-    <section class="ftco-section ftco-book ftco-no-pt ftco-no-pb">
+    <section class="ftco-section ftco-book ftco-no-pt ftco-no-pb mt-5">
         <div class="container">
             <div class="row justify-content-end ml-5">
                 <div class="col-lg-6">
-                    <form action="#" class="appointment-form">
-                        <h3 class="mb-3">Please Enter Your Details</h3>
+                    <form id="search-property" class="appointment-form">
+                        <h3 class="mb-3">Find your next stay</h3>
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <input type="text" id="renter_name" class="form-control" placeholder="Full Name"
-                                        required>
+                                    <input type="text" name="city" id="city" class="form-control"
+                                        placeholder="Select your desired City" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <div class="input-wrap">
                                         <div class="icon"><span class="ion-md-calendar"></span></div>
-                                        <input type="text" class="form-control" id="check-in" placeholder="Check-In"
-                                            required>
+                                        <input type="text" name="check_in" class="form-control" id="check-in"
+                                            placeholder="Check-In" required>
                                     </div>
                                 </div>
                             </div>
@@ -41,50 +41,18 @@
                                 <div class="form-group">
                                     <div class="input-wrap">
                                         <div class="icon"><span class="ion-md-calendar"></span></div>
-                                        <input type="text" class="form-control" id="check-out" placeholder="Check-Out"
-                                            required>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <div class="form-field">
-                                        <div class="select-wrap">
-                                            <input type="number" class="form-control" name="adults" id="adults"
-                                                placeholder="Adults" required>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <div class="form-field">
-                                        <div class="select-wrap">
-                                            <input type="number" class="form-control" name="children" id="children"
-                                                placeholder="Children" required>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <input type="email" class="form-control" name="renter_email" id="renter_email"
-                                        placeholder="Email" required>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <div class="input-wrap">
-                                        <div class="icon"><span class="ion-ios-clock"></span></div>
-                                        <input type="text" class="form-control appointment_time" placeholder="Time"
-                                            id="time" required>
+                                        <input type="text" name="check_out" class="form-control" id="check-out"
+                                            placeholder="Check-Out" required>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <button id="slide-button" class="btn btn-primary py-3 px-4">Book Apartment Now</button>
+                                    <button id="search-property-button" type="button"
+                                        class="btn btn-primary py-3 px-4">Search</button>
                                 </div>
+                                <div id="search-message" class="text-danger" style="display: none;">Please fill in all
+                                    fields.</div>
                             </div>
                         </div>
                     </form>
@@ -134,38 +102,43 @@
         </div>
     </section>
 
-    <section style="display: none" id="apartment-section" class="ftco-section bg-light">
+    <section id="apartment-section" class="ftco-section bg-light ">
         <div class="container-fluid px-md-0">
             <div class="row no-gutters justify-content-center pb-5 mb-3">
                 <div class="col-md-7 heading-section text-center ftco-animate">
                     <h2>Apartment Room</h2>
                 </div>
             </div>
-            <div class="row no-gutters">
-                <div class="col-lg-6">
-                    <div class="room-wrap d-md-flex">
-                        <a href="#" class="img" style="background-image: url(images/room-1.jpg);"></a>
-                        <div class="half left-arrow d-flex align-items-center">
-                            <div class="text p-4 p-xl-5 text-center">
-                                <p class="star mb-0"><span class="fa fa-star"></span><span
-                                        class="fa fa-star"></span><span class="fa fa-star"></span><span
-                                        class="fa fa-star"></span><span class="fa fa-star"></span></p>
-                                <!-- <p class="mb-0"><span class="price mr-1">$120.00</span> <span class="per">per night</span></p> -->
-                                <h3 class="mb-3"><a href="rooms.html">Suite Room</a></h3>
-                                <ul class="list-accomodation">
-                                    <li><span>Max:</span> 3 Persons</li>
-                                    <li><span>Size:</span> 45 m2</li>
-                                    <li><span>View:</span> Sea View</li>
-                                    <li><span>Bed:</span> 1</li>
-                                </ul>
-                                <p class="pt-1"><a id="book_apartment" onclick="bookProperty('2')"
-                                        class="btn-custom px-3 py-2">View Room
-                                        Details <span class="icon-long-arrow-right"></span></a></p>
+            <div id="row-no-gutters" class="row no-gutters">
+                @foreach ($properties as $property)
+                    <div id="output" class="col-lg-6">
+                        <div class="room-wrap d-md-flex">
+                            <a href="#" class="img" style="background-image: url(images/room-1.jpg);"></a>
+                            <div class="half left-arrow d-flex align-items-center">
+                                <div class="text p-4 p-xl-5 text-center">
+                                    <p class="star mb-0"><span class="fa fa-star"></span><span
+                                            class="fa fa-star"></span><span class="fa fa-star"></span><span
+                                            class="fa fa-star"></span><span class="fa fa-star"></span></p>
+                                    <!-- <p class="mb-0"><span class="price mr-1">$120.00</span> <span class="per">per night</span></p> -->
+                                    <h3 class="mb-3"><a href="rooms.html">{{ $property->property_name }}</a></h3>
+                                    <ul class="list-accomodation">
+                                        <li><span>Max:</span>{{ $property->max_persons }}</li>
+                                        <li><span>Size:</span> {{ $property->area }} SQFT</li>
+                                        <li><span>View:</span>{{ $property->view_side }}</li>
+                                        <li><span>Bed:</span> {{ $property->bedrooms }}</li>
+                                    </ul>
+                                    <p class="pt-1"><a id="book_apartment"
+                                            onclick="propertyModal('{{ $property->id }}')"
+                                            class="btn-custom px-3 py-2">View Details
+                                            <span class="icon-long-arrow-right"></span>
+                                        </a>
+                                    </p>
+                                    @include('user.partials.booking-modal')
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-
+                @endforeach
             </div>
         </div>
     </section>

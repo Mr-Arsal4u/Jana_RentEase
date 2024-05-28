@@ -68,7 +68,7 @@
     </section>
     {{-- <img src="" alt=""> --}}
     {{-- <img src="{{asset('modal/img/details.svg')}}" alt="no img"> --}}
-    <div id="bookingModal" style="display: none" class="section">
+    {{-- <div id="bookingModal" style="display: none" class="section">
         <div class="section-center">
             <div class="container">
                 <div class="row">
@@ -93,7 +93,6 @@
                         </div>
                         <form class="" id="" method="POST" action="{{ route('booking.store') }}">
                             @csrf
-                            {{-- <input type="hidden" name="property_id" id=""> --}}
                             <input type="hidden" name="property_id" id="property_id">
 
                             <div class="row">
@@ -161,7 +160,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 @endsection
 
 

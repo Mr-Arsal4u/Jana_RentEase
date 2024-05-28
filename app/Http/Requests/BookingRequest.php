@@ -23,10 +23,11 @@ class BookingRequest extends FormRequest
      */
     public function rules()
     {
+        // dd($this->all());
         return [
             'property_id' => 'required',
-            'renter_name' => 'required',
-            'renter_email' => 'required|email',
+            'name' => 'required',
+            'email' => 'required|email',
             'check_in' => 'required|date|after_or_equal:today',
             'check_out' => 'required|date|after:check_in',
             'adults' => 'required',
@@ -40,18 +41,18 @@ class BookingRequest extends FormRequest
     {
         return [
             'property_id.required' => 'Please select a property',
-            'renter_name.required' => 'Please enter your name',
-            'renter_email.required' => 'Please enter your email',
-            'renter_email.email' => 'Please enter a valid email',
-            'check_in.required' => 'Please select a check-in date',
-            'check_in.date' => 'Please select a valid check-in date',
-            'check_in.after_or_equal' => 'Check-in date must be today or later',
-            'check_out.required' => 'Please select a check-out date',
-            'check_out.date' => 'Please select a valid check-out date',
-            'check_out.after' => 'Check-out date must be after check-in date',
+            'name.required' => 'Please enter your name',
+            'email.required' => 'Please enter your email',
+            'email.email' => 'Please enter a valid email',
+            'check-in.required' => 'Please select a check-in date',
+            'check-in.date' => 'Please select a valid check-in date',
+            'check-in.after_or_equal' => 'Check-in date must be today or later',
+            'check-out.required' => 'Please select a check-out date',
+            'check-out.date' => 'Please select a valid check-out date',
+            'check-out.after' => 'Check-out date must be after check-in date',
             'adults.required' => 'Please enter the number of adults',
             'children.required' => 'Please enter the number of children',
-            'arrival_time.required' => 'Please enter your arrival time',
+            'arrival-time.required' => 'Please enter your arrival time',
         ];
     }
 }

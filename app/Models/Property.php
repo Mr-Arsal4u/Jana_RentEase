@@ -42,19 +42,20 @@ class Property extends Model
 
     public function scopeSearch($query, $s)
     {
-        return $query->where('name', 'like', '%' . $s . '%')
-            ->orWhere('description', 'like', '%' . $s . '%')
-            ->orWhere('address', 'like', '%' . $s . '%')
-            ->orWhere('city', 'like', '%' . $s . '%')
-            ->orWhere('state', 'like', '%' . $s . '%')
-            ->orWhere('zip', 'like', '%' . $s . '%')
-            ->orWhere('price', 'like', '%' . $s . '%');
+        return $query->where('property_name', 'like', '%' . $s . '%')
+            ->orWhere('city', 'like', '%' . $s . '%');
     }
 
-    public function scopeFilter($query, $filters)
+    public function scopeApplyFilter($query, $filters)
     {
-        if ($filters['search'] ?? false) {
-            $query->search($filters['search']);
+        if ($filters['name'] ?? false) {
+            $query->search($filters['name']);
+        }
+        if ($filters['from'] ?? false) {
+            $query->where('created_at', '>=', $filters['from']);
+        }
+        if ($filters['to'] ?? false) {
+            $query->where('created_at', '<=', $filters['to']);
         }
     }
 
@@ -67,6 +68,6 @@ class Property extends Model
 
     public function PropertyAmount()
     {
-        return $this->hasMany(PropertyAmount::class);
+        return $this->hasOne(PropertyAmount::class);
     }
 }

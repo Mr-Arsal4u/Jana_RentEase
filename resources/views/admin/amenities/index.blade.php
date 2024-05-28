@@ -34,7 +34,7 @@
                                             <td><span><a href="#" data-toggle="tooltip" data-placement="top"
                                                         title="" data-original-title="Edit"><i
                                                             class="fa fa-pencil color-muted m-r-5"></i> </a><a
-                                                        href="#" data-toggle="tooltip" data-placement="top"
+                                                        href="{{route('amenities.delete',$amenity->id)}}" data-toggle="tooltip" data-placement="top"
                                                         title="" data-original-title="Close"><i
                                                             class="fa fa-close color-danger"></i></a></span>
                                             </td>

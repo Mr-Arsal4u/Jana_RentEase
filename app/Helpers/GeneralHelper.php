@@ -54,7 +54,7 @@ abstract class GeneralHelper
         $propertyLocation = $data['location'];
         $propertyArea = $data['area'];
         $propertyCity = $data['city'];
-    //    dd($fee['total_amount']);
+        //    dd($fee['total_amount']);
         // $currncy =currency ;
         // dd($propertyName, $propertyLocation, $propertyArea, $propertyCity);
         // Generate the HTML for the contract
@@ -86,5 +86,39 @@ abstract class GeneralHelper
 
         // Return the generated HTML
         return $contractHTML;
+    }
+
+    public static function generate_property_card($properties)
+    {
+        $htmlContent = ''; // Start building your HTML content
+
+        foreach ($properties as $property) {
+            $htmlContent .= '<div class="col-lg-6">' .
+                '<div class="room-wrap d-md-flex">' .
+                '<a href="#" class="img" style="background-image: url(images/room-1.jpg);"></a>' .
+                '<div class="half left-arrow d-flex align-items-center">' .
+                '<div class="text p-4 p-xl-5 text-center">' .
+                '<p class="star mb-0"><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span></p>' .
+                '<h3 class="mb-3"><a href="rooms.html">' . $property->property_name . '</a></h3>' .
+                '<ul class="list-accomodation">' .
+                '<li><span>Max:</span>' . $property->max_persons . '</li>' .
+                '<li><span>Size:</span> ' . $property->area . ' SQFT</li>' .
+                '<li><span>View:</span>' . $property->view_side . '</li>' .
+                '<li><span>Bed:</span>' . $property->bedrooms . '</li>' .
+                '</ul>' .
+                '<p class="pt-1"><a id="book_apartment" onclick="propertyModal(\'' . $property->id . '\')" class="btn-custom px-3 py-2">View Room Details <span class="icon-long-arrow-right"></span></a></p>' .
+                '</div>' .
+                '</div>' .
+                '</div>';
+            return response()->json(['htmlContent' => $htmlContent]);
+        }
+    }
+
+    public static function calculateDays($checkIn, $checkOut)
+    {
+        $checkIn = strtotime($checkIn);
+        $checkOut = strtotime($checkOut);
+        $datediff = $checkOut - $checkIn;
+        return round($datediff / (60 * 60 * 24));
     }
 }

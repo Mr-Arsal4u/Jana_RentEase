@@ -242,9 +242,9 @@ function loadFee() {
 
 
     if (amount === '') {
-        // If the amount is empty, remove the contract HTML from the container
         $('#contract-container').html('');
-        return; // Exit the function
+        $('#submitBtn').prop('disabled', true);
+        return;
     }
 
     $.ajax({
@@ -256,12 +256,13 @@ function loadFee() {
             amount: amount
         },
         success: function (data) {
-            console.log(data.contract);
+            console.log(data.original.contract);
             // $('#contract-container').remove();
-            $('#contract-container').html(data.contract);
+            $('#contract-container').html(data.original.contract);
             // $('#contract-container').html(response.contractHTML);
+            $('#submitBtn').prop('disabled', false); // Enable the Save button
 
-            console.log(data);
+            // console.log(data);
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.error(textStatus, errorThrown);

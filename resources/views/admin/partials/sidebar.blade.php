@@ -7,10 +7,19 @@
                     <i class="icon-badge menu-icon"></i><span class="nav-text">Dasboard</span>
                 </a>
             </li>
-            <li>
+            {{-- <li>
                 <a href="{{ route('properties') }}" aria-expanded="false">
                     <i class="icon-badge menu-icon"></i><span class="nav-text">Properties</span>
                 </a>
+            </li> --}}
+            <li class="mega-menu mega-menu-sm">
+                <a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                    <i class="icon-globe-alt menu-icon"></i><span class="nav-text">Properties</span>
+                </a>
+                <ul aria-expanded="false">
+                    <li><a href="{{route('properties')}}">All Properties</a></li>
+                    <li><a href="{{route('properties.create')}}">Create Property</a></li>
+                </ul>
             </li>
             <li>
                 <a href="{{ route('currency') }}" aria-expanded="false">

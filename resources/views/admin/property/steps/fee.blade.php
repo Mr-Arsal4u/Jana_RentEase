@@ -40,7 +40,7 @@
                     <div class="currency-options">
                         <div class="form-check form-check-inline currency">
                             <input class="form-check-input" type="radio" name="currency" id="currency_id"
-                                value="{{ $currency->id }}">
+                                value="{{ $currency->id }}" required>
                             <label class="form-check-label" for="currencyPKR">{{ $currency->code }}</label>
                         </div>
                     </div>
@@ -60,7 +60,7 @@
     </div>
     <div class="d-flex justify-content-between mt-4">
         <button type="button" class="btn btn-secondary" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
-        <button type="button" class="btn btn-primary" id="submitBtn">Save </button>
+        <button type="button" class="btn btn-primary" id="submitBtn" disabled>Save </button>
     </div>
 </div>
 <div style="display: none" id="success-container" class="success-container">
