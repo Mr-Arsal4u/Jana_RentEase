@@ -56,18 +56,28 @@
                 </li> --}}
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle {{ request()->is('property-listings/*') ? ' active' : '' }}"
-                        href="#" id="propertiesDropdown" role="button" data-toggle="dropdown"
+                        href="#" id="accountDropdown" role="button" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
-                            Properties
+                            Account
                     </a>    
-
-                    <div class="dropdown-menu" aria-labelledby="propertiesDropdown">
-                        <a class="dropdown-item {{ request()->is('property-listings/apartment') ? 'active' : '' }}"
-                            href="{{ route('rooms', 'apartment') }}">Apartment Rooms</a>
-                        <a class="dropdown-item {{ request()->is('property-listings/house') ? 'active' : '' }}"
-                            href="{{ route('rooms', 'house') }}">Houses</a>
+                
+                    <div class="dropdown-menu" aria-labelledby="accountDropdown">
+                        @guest
+                            <a class="dropdown-item {{ request()->is('login') ? 'active' : '' }}" href="{{ route('login') }}">Login</a>
+                            <a class="dropdown-item {{ request()->is('register') ? 'active' : '' }}" href="{{ route('register') }}">Register</a>
+                        @else
+                            <a class="dropdown-item {{ request()->is('profile') ? 'active' : '' }}" href="{{ route('profile') }}">Profile</a>
+                            <a class="dropdown-item" href="{{ route('logout') }}"
+                               onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                Logout
+                            </a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>
+                        @endguest
                     </div>
                 </li>
+                
                 <li class="nav-item{{ request()->routeIs('blog') ? ' active' : '' }}">
                     <a href="{{ route('blog') }}" class="nav-link">Blog</a>
                 </li>

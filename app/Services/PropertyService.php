@@ -19,7 +19,7 @@ class PropertyService
     public function getProperties()
     {
         // dd(request()->all());
-        $properties = Property::ApplyFilter(request()->only(['from', 'to', 'name']))->get();
+        $properties = Property::ApplyFilter(request()->only(['from', 'to', 'name']))->with('PropertyAmount', 'amenities')->get();
         return $properties;
     }
 
@@ -118,6 +118,7 @@ class PropertyService
             $property->images()->createMany($images);
             return response()->json(['status' => 'success', 'message' => 'Images uploaded successfully']);
         } catch (\Exception $e) {
+            Log::error($e->getMessage());
             return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
         }
     }

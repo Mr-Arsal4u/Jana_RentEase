@@ -9,6 +9,8 @@ use App\Http\Controllers\ViewsController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\PropertiesController;
 use App\Http\Controllers\Admin\PropertyController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,19 +36,21 @@ Route::get('room-details/{id}', [ViewsController::class, 'roomDetails'])->name('
 Route::get('blog', [ViewsController::class, 'blog'])->name('blog');
 Route::get('blog-details', [ViewsController::class, 'blogDetails'])->name('blog-details');
 // Route::get('booking',[BookingController::class,'index'])->name('booking');
-Route::get('property-bookings/{id}', [BookingController::class, 'getBookings'])->name('property.bookings');
-
+Route::get('create-bookings/{id}', [BookingController::class, 'createBooking'])->name('create.booking');
+// Route::get('booking/{id}', [BookingController::class, 'index'])->name('create.booking');
 Route::post('booking', [BookingController::class, 'saveBooking'])->name('booking.store');
 
 Route::get('properties-filter', [PropertiesController::class, 'getProperties'])->name('properties.filter');
 Route::post('owner-login', [OwnerController::class, 'login'])->name('ownerlogin');
 Route::get('owner/login', [OwnerController::class, 'loginPage'])->name('owner.login');
-Route::get('admin-dashboard', [OwnerController::class, 'adminDashboard'])->name('admin.dashboard');
+Route::get('admin-dashboard', [OwnerController::class, 'adminDashboard'])->name('dashboard');
 Route::get('owner-dashboard', [OwnerController::class, 'ownerDashboard'])->name('owner.dashboard');
-
+Route::get('owner/register', [OwnerController::class, 'registerPage'])->name('owner.register');
 // Route::get('owner/properties',[PropertiesController::class,'getOwnerProperties'])->name('owner.properties');
 
-
+// Route::get('owner/properties', [PropertyController::class, 'index'])->name('owner.properties');
+Route::get('payment/{property_id}/{booking_id}', [PaymentController::class, 'payment'])->name('payment.create');
+Route::post('store-payment', [PaymentController::class, 'createPayment'])->name('payment.store');
 Route::get('all-properties', [PropertyController::class, 'index'])->name('properties');
 Route::get('create-property', [PropertyController::class, 'create'])->name('properties.create');
 
@@ -61,7 +65,16 @@ Route::post('property-images', [PropertyController::class, 'savePropertyImages']
 Route::get('get-fee', [PropertyController::class, 'getFee'])->name('get.fee');
 Route::post('submit-application', [PropertyController::class, 'submitApplication'])->name('submit.application');
 Route::get('currency', [CurrencyController::class, 'index'])->name('currency');
-Route::get('find-property',[PropertiesController::class,'findProperty'])->name('find.property');
+Route::get('find-property', [PropertiesController::class, 'findProperty'])->name('find.property');
 Route::post('save-currency', [CurrencyController::class, 'save'])->name('currency.save');
+Route::get('delete-currency/{id}', [CurrencyController::class, 'delete'])->name('currency.delete');
+// Route::get('edit-currency/{id}', [CurrencyController::class, 'edit'])->name('currency.edit');
 
-// Route::delete()
+Route::get('login', [UserController::class, 'login'])->name('login');
+Route::post('login', [UserController::class, 'authenticate'])->name('login.user');
+Route::get('register', [UserController::class, 'register'])->name('register');
+Route::post('register', [UserController::class, 'store'])->name('register.user');
+Route::post('logout', [UserController::class, 'logout'])->name('logout');
+Route::get('profile', [UserController::class, 'profile'])->name('profile');
+Route::put('update-password', [UserController::class, 'updatePassword'])->name('update.password');
+Route::put('update-profile', [UserController::class, 'updateProfile'])->name('profile.update');

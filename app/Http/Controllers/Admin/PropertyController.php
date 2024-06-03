@@ -51,7 +51,6 @@ class PropertyController extends Controller
     public function deleteAmenities($id)
     {
         return $this->propertyService->deleteAmenity($id);
-        // return response()->json($response);
     }
 
     public function saveAmenities(Request $request)

@@ -10,14 +10,17 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Http\Requests\BookingRequest;
 use App\Services\BookingService;
+use App\Services\PropertyService;
 
 class BookingController extends Controller
 {
 
-    private $bookingsService;
+    protected $bookingsService;
+    protected $propertyService;
 
-    public function __construct(BookingService $bookingsService)
+    public function __construct(BookingService $bookingsService, PropertyService $propertyService)
     {
+        $this->propertyService = $propertyService;
         $this->bookingsService = $bookingsService;
     }
 
@@ -28,14 +31,13 @@ class BookingController extends Controller
 
     public function saveBooking(BookingRequest $request)
     {
-        // dd($request->all());
-      return $this->bookingsService->saveBooking($request);
+        return $this->bookingsService->saveBooking($request);
     }
 
 
-    public function getBookings($id)
+    public function createBooking($id)
     {
-        $bookings = Booking::where('property_id', $id)->get(['check_in', 'check_out']);
-        return response()->json($bookings);
+        $property = $this->propertyService->getProperties()->where('id', $id)->first();
+        return view('user.property-bookings', compact('property'));
     }
 }

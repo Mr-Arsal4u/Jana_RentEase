@@ -8,7 +8,7 @@
                 <div class="col-md-7 ftco-animate">
                     <h2 class="subheading">Welcome to JANA Rent Ease</h2>
                     <h1 class="mb-4">Rent an appartment for your vacation</h1>
-                    <p><a href="{{ route('owner.login') }}" class="btn btn-primary">List Your Property</a> <a href="#"
+                    <p><a href="{{ route('owner.dashboard') }}" class="btn btn-primary">List Your Property</a> <a href="#"
                             class="btn btn-white">Contact us</a></p>
                 </div>
             </div>
@@ -113,7 +113,15 @@
                 @foreach ($properties as $property)
                     <div id="output" class="col-lg-6">
                         <div class="room-wrap d-md-flex">
-                            <a href="#" class="img" style="background-image: url(images/room-1.jpg);"></a>
+                            <a class="img" href="#">
+                                @if ($property->images->isNotEmpty())
+                                    <img class="img"
+                                        src="{{ asset(str_replace('public/', 'storage/', $property->images->first()->image)) }}"
+                                        alt="Property Image">
+                                @else
+                                    <p>No image available</p>
+                                @endif
+                            </a>
                             <div class="half left-arrow d-flex align-items-center">
                                 <div class="text p-4 p-xl-5 text-center">
                                     <p class="star mb-0"><span class="fa fa-star"></span><span
@@ -128,12 +136,11 @@
                                         <li><span>Bed:</span> {{ $property->bedrooms }}</li>
                                     </ul>
                                     <p class="pt-1"><a id="book_apartment"
-                                            onclick="propertyModal('{{ $property->id }}')"
+                                            href="{{ route('create.booking', $property->id) }}" {{-- onclick="propertyModal('{{ $property->id }}')" --}}
                                             class="btn-custom px-3 py-2">View Details
                                             <span class="icon-long-arrow-right"></span>
                                         </a>
                                     </p>
-                                    @include('user.partials.booking-modal')
                                 </div>
                             </div>
                         </div>
@@ -142,6 +149,7 @@
             </div>
         </div>
     </section>
+    
     <section class="ftco-section testimony-section bg-light">
         <div class="container">
             <div class="row justify-content-center pb-5 mb-3">

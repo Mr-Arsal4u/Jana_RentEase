@@ -38,7 +38,6 @@
                                         <th>City</th>
                                         <th>Zip Code</th>
                                         <th>Status</th>
-
                                         <th>Created At</th>
                                         <th>Actions</th>
                                     </tr>

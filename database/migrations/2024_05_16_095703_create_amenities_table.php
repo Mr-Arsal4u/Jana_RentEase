@@ -15,7 +15,7 @@ class CreateAmenitiesTable extends Migration
     {
         Schema::create('amenities', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name')->unique();
             $table->string('icon')->nullable();
             $table->string('status')->default(1);
             $table->string('description')->nullable();

@@ -24,7 +24,8 @@ class PropertiesController extends Controller
         if ($request->ajax()) {
             $properties = $this->propertyService->getFilteredProperties($request);
             $content = GeneralHelper::generate_property_card($properties);
-            return response()->json(['content' => $content]);
+            $property = $this->propertyService->getProperties()->where('id', $request->id)->first();
+            return response()->json(['content' => $content, 'property' => $property]);
         }
         return view('user.index', compact('properties'));
     }

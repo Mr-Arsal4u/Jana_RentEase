@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Log;
 class BookingService
 {
 
+
     public function getBookings()
     {
         return Booking::query();
@@ -25,37 +26,39 @@ class BookingService
             $checkInDate = Carbon::parse($request->check_in)->format('Y-m-d');
             $checkOutDate = Carbon::parse($request->check_out)->format('Y-m-d');
             $property = Property::findOrFail($request->property_id);
-            $hour = $request->arrival_time;
-            $period = $request->period;
-            $time = $hour . ' ' . $period;
+            // $hour = $request->arrival_time;
+            // $period = $request->period;
+            // $time = $hour . ' ' . $period;
 
             $bookings = self::bookingsBydate($request->property_id, $checkInDate, $checkOutDate);
             if ($bookings->count() > 0) {
-                return response()->json(['error' => 'Property is already booked for the selected dates'], 500);
+                return back()->with('error', 'Property is already booked for the selected dates');
             }
             $booking = new Booking();
             $booking->check_in = $request->check_in;
             $booking->check_out = $request->check_out;
             $booking->days = GeneralHelper::calculateDays($request->check_in, $request->check_out);
-
             $booking->adults = $request->adults;
             $booking->children = $request->children;
-            // dd('here');
-
-            $booking->arrival_time = $time;
-
+            $booking->arrival_time = $request->arrival_time;
             // $booking->arrival_time = $request->arrival_time;
             $booking->property_id = $property->id;
 
             $booking->user_id = auth()->id() ?? UserHelper::getUser($request);
 
             $booking->save();
-            // dd('here');
 
-            return response()->json(['success' => 'Booking Created successfully']);
+            // dd('here');
+            // UserHelper::sendBookingEmail($booking);
+            // return redirect()->route('payment.create', ['property' => $property->id, 'booking' => $booking->id]);
+            return redirect()->route('payment.create', [
+                'property_id' => $property->id,
+                'booking_id' => $booking->id,
+            ]);
         } catch (Exception $e) {
             Log::error($e->getMessage());
-            return response()->json(['error' => 'An error occurred while creating the booking'], 500);
+            return back()->with('error', 'An error occurred while creating the booking');
+            // return response()->json(['error' => 'An error occurred while creating the booking'], 500);
         }
     }
 

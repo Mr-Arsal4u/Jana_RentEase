@@ -44,15 +44,15 @@ class BookingRequest extends FormRequest
             'name.required' => 'Please enter your name',
             'email.required' => 'Please enter your email',
             'email.email' => 'Please enter a valid email',
-            'check-in.required' => 'Please select a check-in date',
-            'check-in.date' => 'Please select a valid check-in date',
-            'check-in.after_or_equal' => 'Check-in date must be today or later',
-            'check-out.required' => 'Please select a check-out date',
-            'check-out.date' => 'Please select a valid check-out date',
-            'check-out.after' => 'Check-out date must be after check-in date',
+            'check_in.required' => 'Please select a check-in date',
+            'check_in.date' => 'Please select a valid check-in date',
+            'check_in.after_or_equal' => 'Check-in date must be today or later',
+            'check_out.required' => 'Please select a check-out date',
+            'check_out.date' => 'Please select a valid check-out date',
+            'check_out.after' => 'Check-out date must be after check-in date',
             'adults.required' => 'Please enter the number of adults',
             'children.required' => 'Please enter the number of children',
-            'arrival-time.required' => 'Please enter your arrival time',
+            'arrival_time.required' => 'Please enter your arrival time',
         ];
     }
 }

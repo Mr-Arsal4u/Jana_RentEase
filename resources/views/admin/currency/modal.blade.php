@@ -23,8 +23,8 @@
                     <div class="form-group">
                         <label for="currencyStatus" class="col-form-label">Status:</label>
                         <select class="form-control" id="currencyStatus" name="status" required>
-                            <option value="active">Active</option>
-                            <option value="inactive">Inactive</option>
+                            <option value="1">Active</option>
+                            <option value="0">Inactive</option>
                         </select>
                     </div>
             </div>
