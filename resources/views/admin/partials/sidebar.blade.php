@@ -1,6 +1,6 @@
-<div class="nk-sidebar">
-    <div class="nk-nav-scroll">
-        <ul class="metismenu" id="menu">
+<div class="nk-sidebar" style="background-color:rgb(220, 220, 220)">
+    <div class="nk-nav-scroll"style="background-color:rgb(220, 220, 220)" >
+        <ul class="metismenu" id="menu" style="background-color:rgb(220, 220, 220)">
             {{-- <li class="nav-label">Dashboard</li> --}}
             <li>
                 <a href="{{ route('dashboard') }}" aria-expanded="false">

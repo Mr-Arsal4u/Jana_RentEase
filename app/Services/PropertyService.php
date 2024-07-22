@@ -8,18 +8,19 @@ use App\Models\Amenity;
 use App\Models\Booking;
 use App\Models\Currency;
 use App\Models\Property;
+use App\Models\RoomType;
 use App\Helpers\GeneralHelper;
 use App\Models\PropertyAmount;
 use PhpParser\Node\Expr\FuncCall;
 use Illuminate\Support\Facades\Log;
+use App\Models\PropertyRoomTypeCount;
 use Illuminate\Support\Facades\Storage;
 
 class PropertyService
 {
     public function getProperties()
     {
-        // dd(request()->all());
-        $properties = Property::ApplyFilter(request()->only(['from', 'to', 'name']))->with('PropertyAmount', 'amenities')->get();
+        $properties = Property::ApplyFilter(request()->only(['from', 'to', 'name']))->with('amenities', 'roomTypes')->get();
         return $properties;
     }
 
@@ -44,6 +45,11 @@ class PropertyService
         return $properties;
     }
 
+    public function getRoomTypes()
+    {
+        $roomTypes = RoomType::get();
+        return $roomTypes;
+    }
 
     public function getAmenities()
     {
@@ -68,31 +74,71 @@ class PropertyService
     //     $property = Property::find($id);
     //     return $property;
     // }
-    public  function saveProperty($request)
+    // public function saveProperty($request)
+    // {
+    //     // dd($request->all());
+    //     try {
+    //         $property = $this->getProperties()->where('property_no', $request->property_no)->first();
+    //         // dd($property);
+    //         if ($request->step == "1") {
+    //             // dd($request);
+    //             $data = $request->except('step');
+    //             if ($property) {
+    //                 $property->update($data);
+    //             } else {
+    //                 Property::create($data);
+    //             }
+    //         }
+    //         if ($request->step == "2" && $property) {
+    //             // dd('here');
+    //             $property->update($request->only(['bedrooms', 'bathrooms', 'max_persons', 'view_side', 'description']));
+    //         }
+    //         return response()->json(['status' => 'success', 'message' => 'Property step added successfully']);
+    //     } catch (\Exception $e) {
+    //         return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+    //         Log::error($e->getMessage());
+    //     }
+    // }
+
+    public function saveProperty($request)
+    {
+        try {
+            $property = $this->getProperties()->where('property_no', $request->property_no)->first();
+            if ($property) {
+                $property->update($request->all());
+            } else {
+                Property::create($request->all());
+            }
+            return response()->json(['status' => 'success', 'message' => 'Property added successfully']);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+        }
+    }
+
+    public function saveRoomsCount($propertyNo, $totalRooms, $roomCounts)
     {
         // dd($request->all());
         try {
-            $property = $this->getProperties()->where('property_no', $request->property_no)->first();
-            // dd($property);
-            if ($request->step == "1") {
-                // dd($request);
-                $data = $request->except('step');
-                if ($property) {
-                    $property->update($data);
-                } {
-                    Property::create($data);
+            $property = $this->getProperties()->where('property_no', $propertyNo)->first();
+            if ($property) {
+                $property->update(['total_rooms' => $totalRooms]);
+                PropertyRoomTypeCount::where('property_id', $property->id)->delete();
+                foreach ($roomCounts as $roomTypeId => $count) {
+                    PropertyRoomTypeCount::create([
+                        'property_id' => $property->id,
+                        'room_type_id' => $roomTypeId,
+                        'count' => $count
+                    ]);
                 }
             }
-            if ($request->step == "2" && $property) {
-                // dd('here');
-                $property->update($request->only(['bedrooms', 'bathrooms', 'max_persons', 'view_side', 'description']));
-            }
-            return response()->json(['status' => 'success', 'message' => 'Property step added successfully']);
+            return response()->json(['status' => 'success', 'message' => 'Rooms count added successfully']);
         } catch (\Exception $e) {
-            return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             Log::error($e->getMessage());
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
         }
     }
+
     public function getCurrency()
     {
         $currency = Currency::get();
@@ -101,9 +147,15 @@ class PropertyService
 
     public function savePropertyImages($request)
     {
+        // dd($request->description);
         try {
             $property = self::getProperties()->where('property_no', $request->property_no)->first();
             if ($property) {
+                $property->update([
+                    'description' => $request->description,
+                    'application_status' => $request->status
+
+                ]);
                 $oldImages = $property->images;
                 if ($oldImages->isNotEmpty()) {
                     $property->images()->delete();
@@ -141,30 +193,16 @@ class PropertyService
             return ['status' => 'error', 'message' => $e->getMessage()];
         }
     }
+
     public function createAmenity($request)
     {
         try {
-            $amenity = new Amenity();
-            $amenity->name = $request->name;
-            $amenity->description = $request->description;
-            $amenity->save();
+            Amenity::create($request->all());
+            // Amenity::create([$request->all()]);     $request->all();
             return redirect()->back()->with('success', 'Amenity added successfully');
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return redirect()->back()->with('error', 'An error occurred');
-        }
-    }
-
-    public function getFee($request)
-    {
-        try {
-            $property = $this->getProperties()->where('property_no', $request->property_no)->first();
-            $fee = GeneralHelper::calculateFee($request->amount);
-            $currency = $this->getCurrency()->where('id', $request->currency)->first();
-            $contract = GeneralHelper::applicationContract($property, $fee, $currency->code);
-            return response()->json(['status' => 'success', 'contract' => $contract]);
-        } catch (\Exception $e) {
-            return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
         }
     }
 
@@ -187,6 +225,51 @@ class PropertyService
             return response()->json(['status' => 'success', 'message' => 'Application submitted successfully']);
         } catch (\Exception $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+        }
+    }
+
+    public function getLeftRoomsCount($properties)
+    {
+        $leftRoomsCount = 0;
+
+        foreach ($properties as $property) {
+            $total_count = $property->total_rooms;
+            $rooms_count = $property->roomTypes->sum('room_count');
+            $leftRoomsCount = $total_count - $rooms_count;
+        }
+        return $leftRoomsCount;
+    }
+
+    public function filterEachRecord($properties)
+    {
+        $properties_view = '';
+        if ($properties->count() > 0) {
+            foreach ($properties as $property) {
+                $property_view = (string)view('admin.property.table', compact('property'));
+                $properties_view = $properties_view . $property_view;
+            }
+        } else {
+            $property_view = (string)view('admin.property.table');
+            $properties_view = $properties_view . $property_view;
+        }
+        return $properties_view;
+    }
+
+    public function deleteProperty($id)
+    {
+        try {
+            // $property = Property::find($id);
+            $property = $this->getProperties()->where('id', $id)->first();
+            $property->amenities()->delete();
+            $property->images()->delete();
+            $property->rooms()->delete();
+            $property->reviews()->delete();
+            $property->roomTypes()->delete();
+            $property->delete();
+            return ['status' => 'success', 'message' => 'Property deleted successfully'];
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return ['status' => 'error', 'message' => 'An error occurred'];
         }
     }
 }

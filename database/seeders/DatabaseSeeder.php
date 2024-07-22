@@ -9,6 +9,9 @@ use App\Models\Renter;
 use App\Models\Booking;
 use App\Models\Property;
 use App\Models\AmountType;
+use App\Models\RoomType;
+use Database\Factories\AmenityFactory;
+use Database\Factories\CurrencyFactory;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 
@@ -21,8 +24,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        
-        $this->call(UsersSeeder::class);
-        
+
+        $this->call([
+            UsersSeeder::class,
+            CurrencySeeder::class,
+        ]);
+
+        AmenityFactory::times(5)->create();
+
+        // CurrencyFactory::times(5)->create();
+        // RoomType::factory()->times(5)->create();
     }
 }

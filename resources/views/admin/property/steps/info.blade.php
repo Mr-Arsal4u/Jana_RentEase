@@ -45,7 +45,7 @@
             <div class="form-group">
                 <label for="area">Property Area</label>
                 <div class="input-group">
-                    <input type="number" name="area" id="area" class="form-control"
+                    <input type="number" name="property_area" id="property_area" class="form-control"
                         placeholder="Property area in Square feet" required>
                     <span class="input-group-text">sqft</span>
                 </div>
@@ -67,6 +67,13 @@
                 <label for="country">Country</label>
                 <input type="text" name="country" id="country" class="form-control"
                     placeholder="Country" required>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="form-group">
+                <label for="rooms">Total Number of Rooms</label>
+                <input type="number" name="rooms" id="rooms" class="form-control" placeholder="Enter total rooms" required>
+                <div id="error-message" style="color: red; display: none;">The total count of all room types must exactly match the total number of rooms.</div>
             </div>
         </div>
     </div>

@@ -15,7 +15,7 @@ class CreatePropertyAmountsTable extends Migration
     {
         Schema::create('property_amounts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('property_id')->constrained()->onDelete('cascade')->nullable()->name('property_amounts_property_id_foreign');
+            $table->foreignId('room_type_id')->constrained()->onDelete('cascade')->nullable()->name('property_amounts_room_type_id_foreign');
             $table->foreignId('currency_id')->constrained()->onDelete('cascade')->nullable()->name('property_amounts_currency_id_foreign'); 
             $table->string('total_amount')->nullable();
             $table->string('user_amount')->nullable();

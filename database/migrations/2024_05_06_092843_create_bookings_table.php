@@ -15,15 +15,18 @@ class CreateBookingsTable extends Migration
     {
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('property_id')->constrained('properties');
-            $table->unsignedBigInteger('user_id')->constrained('users');
-            $table->foreign('property_id')->references('id')->on('properties')->onDelete('cascade');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            // $table->unsignedBigInteger('room_id')->constrained('rooms')->onDelete('cascade')->nullable();
+            // $table->unsignedBigInteger('user_id')->constrained('users')->ondelete('cascade')->nullable();
+            $table->foreignId('property_id')->references('id')->on('properties')->onDelete('cascade');
+            $table->foreignId('room_id')->references('id')->on('rooms')->onDelete('cascade')->name('bookings_room_id_foreign');
+            $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade')->nullable();
             $table->date('check_in');
             $table->date('check_out');
             $table->string('days');
             $table->string('adults');
             $table->string('children');
+            $table->integer('rooms_booked');
+            $table->string('total_cost');
             $table->string('status')->default('Pending');
             $table->string('arrival_time')->nullable();
             $table->timestamps();

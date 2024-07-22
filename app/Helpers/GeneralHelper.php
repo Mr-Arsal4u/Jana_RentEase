@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\Models\Room;
 use App\Models\Property;
 
 abstract class GeneralHelper
@@ -12,7 +13,7 @@ abstract class GeneralHelper
     {
         return date('d F Y');
     }
-    public static function RANDOM_STRING($length = 4): string
+    public static function RANDOM_STRING($prefix = 'PN-', $length = 4): string
     {
         $characters = '0123456789PQWUAGDALSKDJ';
         $charactersLength = strlen($characters);
@@ -20,8 +21,31 @@ abstract class GeneralHelper
         for ($i = 0; $i < $length; $i++) {
             $randomString .= $characters[rand(0, $charactersLength - 1)];
         }
-        return 'PN-' . $randomString;
+        return $prefix . $randomString;
     }
+
+    public static function ROOM_NO($prefix = 'RN-', $length = 4): string
+    {
+        $characters = '0123456789';
+        $charactersLength = strlen($characters);
+        $unique = false;
+        $randomString = '';
+
+        while (!$unique) {
+            $randomString = '';
+            for ($i = 0; $i < $length; $i++) {
+                $randomString .= $characters[rand(0, $charactersLength - 1)];
+            }
+            $roomNo = $prefix . $randomString;
+
+            if (!Room::where('room_no', $roomNo)->exists()) {
+                $unique = true;
+            }
+        }
+
+        return $roomNo;
+    }
+
 
     public static function GENERATE_APPLICATION_NUMBER()
     {
@@ -45,21 +69,16 @@ abstract class GeneralHelper
         ];
     }
 
-    public static function applicationContract($data, $fee, $currency)
+    public static function applicationContract($data, $currency, $fee, $property)
     {
-
-        // dd($fee, $currency);
-        // Extract property details from $data
-        $propertyName = $data['property_name'];
-        $propertyLocation = $data['location'];
-        $propertyArea = $data['area'];
-        $propertyCity = $data['city'];
-        //    dd($fee['total_amount']);
-        // $currncy =currency ;
-        // dd($propertyName, $propertyLocation, $propertyArea, $propertyCity);
-        // Generate the HTML for the contract
+        // Property details
+        $propertyName = $property['property_name'];
+        $propertyLocation = $property['location'];
+        $totalRooms = $property['total_rooms'];
+        $propertyCity = $property['city'];
+    
+        // Start contract HTML
         $contractHTML = '
-       
             <div class="container">
                 <h2>Application Contract</h2>
                 <hr>
@@ -68,25 +87,35 @@ abstract class GeneralHelper
                         <h4>Property Details</h4>
                         <p><strong>Property Name:</strong> ' . $propertyName . '</p>
                         <p><strong>Location:</strong> ' . $propertyLocation . '</p>
-                        <p><strong>Area:</strong> ' . $propertyArea .  ' Square Feets</p>
-                        <p><strong>City:</strong> ' . $propertyCity .  '</p>
+                        <p><strong>Total Rooms:</strong> ' . $totalRooms . '</p>
+                        <p><strong>City:</strong> ' . $propertyCity . '</p>
                     </div>
                     <div class="col-md-6">
                         <h4>Contract Summary</h4>
-                        <p><strong>Total Amount:</strong>$' . $fee['total_amount'] . '</p>
-                        <p><strong>Admin\'s Fee :</strong> $' . $fee['fee'] . '</p>
+                        <p><strong>Total Amount:</strong> $' . $fee['total_amount'] . '</p>
+                        <p><strong>Admin\'s Fee:</strong> $' . $fee['fee'] . '</p>
                         <p><strong>Your Amount:</strong> $' . $fee['owner_amount'] . '</p>
                         <p><strong>Currency:</strong> ' . $currency . '</p>
                     </div>
                 </div>
-                <hr>
-                <p>By clicking on save button , you agree to the terms and conditions outlined above and your Application will be submitted.</p>
+                <hr>';
+    
+        // Iterate over each room to display room numbers only
+        // $contractHTML .= '<div class="row"><div class="col-md-12"><h4>Room Numbers</h4><ul>';
+        // foreach ($data as $room) {
+        //     $contractHTML .= '<li>Rooms Numbers: ' . $room['room_no'] . '</li>';
+        // }
+        $contractHTML .= '</ul></div></div><hr>';
+    
+        // Closing part of the contract HTML
+        $contractHTML .= '
+                <p>By clicking on Submit button, you agree to the terms and conditions outlined above and your application will be submitted.</p>
             </div>
         ';
-
-        // Return the generated HTML
+    
         return $contractHTML;
     }
+    
 
     public static function generate_property_card($properties)
     {

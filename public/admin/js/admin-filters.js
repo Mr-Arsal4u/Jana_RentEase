@@ -5,7 +5,7 @@ function propertyFilters() {
     var name = $("#property_name").val();
 
     $.ajax({
-        url: '/all-properties',
+        url: '/properties',
         type: 'GET',
         data: {
             name: name,
@@ -13,26 +13,13 @@ function propertyFilters() {
             to: to,
         },
         success: function (response) {
-            // Clear existing table content
-            $('#properties_table_body').empty();
-            $('#properties_table_body p').text('No records found');
-
-            // Loop through each property in the response and append a row to the table
-            response.forEach(function (property) {
-                var row = '<tr>' +
-                    '<td>' + property.property_name + '</td>' +
-                    '<td>' + property.description + '</td>' +
-                    '<td>' + property.location + '</td>' +
-                    '<td>' + (property.PropertyAmount ? property.PropertyAmount.user_amount + ', ' + property.PropertyAmount.currency.code : '---') + '</td>' +
-                    '<td>' + property.area + ' SQFT</td>' +
-                    '<td>' + property.city + '</td>' +
-                    '<td>' + property.zip_code + '</td>' +
-                    '<td><span class="badge badge-success px-2">Active</span></td>' +
-                    '<td>' + property.created_at + '</td>' +
-                    '<td><span><a href="#" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pencil color-muted m-r-5"></i></a><a href="#" data-toggle="tooltip" data-placement="top" title="Close"><i class="fa fa-close color-danger"></i></a></span></td>' +
-                    '</tr>';
-                $('#properties_table_body').append(row);
-            });
+            console.log(response);
+            // $('#properties_table_body').empty();
+            // $('#properties_table_body p').text('No records found');
+            $("#properties_table_body tr").remove();
+            $("#properties_table_body").append(response.data);
+            // $(".paginationLinks").html(response.pagination);
+         
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.error(textStatus, errorThrown);

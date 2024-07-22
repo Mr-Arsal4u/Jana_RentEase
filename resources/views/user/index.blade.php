@@ -130,10 +130,10 @@
                                     <!-- <p class="mb-0"><span class="price mr-1">$120.00</span> <span class="per">per night</span></p> -->
                                     <h3 class="mb-3"><a href="rooms.html">{{ $property->property_name }}</a></h3>
                                     <ul class="list-accomodation">
-                                        <li><span>Max:</span>{{ $property->max_persons }}</li>
-                                        <li><span>Size:</span> {{ $property->area }} SQFT</li>
-                                        <li><span>View:</span>{{ $property->view_side }}</li>
-                                        <li><span>Bed:</span> {{ $property->bedrooms }}</li>
+                                        <li><span>Rooms:</span>{{ $property->total_rooms }}</li>
+                                        <li><span>City:</span> {{ $property->city }}</li>
+                                        <li><span>Area:</span>{{ $property->property_area }} SQFT</li>
+                                        <li><span>Address:</span> {{ $property->location }}</li>
                                     </ul>
                                     <p class="pt-1"><a id="book_apartment"
                                             href="{{ route('create.booking', $property->id) }}" {{-- onclick="propertyModal('{{ $property->id }}')" --}}

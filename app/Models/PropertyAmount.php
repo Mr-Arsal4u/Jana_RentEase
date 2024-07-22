@@ -11,9 +11,9 @@ class PropertyAmount extends Model
 
     protected $guarded = [];
 
-    public function property()
+    public function roomType()
     {
-        return $this->belongsTo(Property::class);
+        return $this->belongsTo(RoomType::class);
     }
 
     public function currency()

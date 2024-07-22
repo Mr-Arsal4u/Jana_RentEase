@@ -38,6 +38,9 @@ class BookingController extends Controller
     public function createBooking($id)
     {
         $property = $this->propertyService->getProperties()->where('id', $id)->first();
-        return view('user.property-bookings', compact('property'));
+        
+        // return view('user.property.property-bookings', compact('property'));
+        return view('user.property.accordion-booking', compact('property'));
+
     }
 }

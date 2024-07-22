@@ -11,15 +11,12 @@ class Property extends Model
 
     protected $guarded = [];
 
-    public function bookings()
-    {
-        return $this->hasMany(Booking::class);
-    }
 
     public function images()
     {
         return $this->hasMany(Image::class);
     }
+
     public function amenities()
     {
         return $this->belongsToMany(Amenity::class);
@@ -30,14 +27,19 @@ class Property extends Model
         return $this->hasMany(Review::class);
     }
 
-    public function renter()
+    public function rooms()
     {
-        return $this->belongsTo(User::class);
+        return $this->hasMany(Room::class);
     }
 
     public function owner()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function roomTypes()
+    {
+        return $this->hasMany(RoomType::class);
     }
 
     public function scopeSearch($query, $s)
@@ -64,10 +66,5 @@ class Property extends Model
         $query->whereHas('amenities', function ($query) use ($amenities) {
             $query->whereIn('amenity_id', $amenities);
         });
-    }
-
-    public function PropertyAmount()
-    {
-        return $this->hasOne(PropertyAmount::class);
     }
 }

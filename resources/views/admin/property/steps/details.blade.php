@@ -1,60 +1,67 @@
 <div class="step" id="step2">
-    <h3 class="mb-3">Property Details</h3>
+    <h3 class="mb-3">Room Type Details</h3>
+   
     <div class="row g-3">
-        <!-- Bedrooms -->
         <div class="col-lg-6">
             <div class="form-group">
-                <label for="bedrooms">Number of Bedrooms</label>
-                <input type="number" name="bedrooms" id="bedrooms" class="form-control"
-                    placeholder="No of Bedrooms" required>
+                <label for="rooms">Total Number of Rooms</label>
+                <input type="number" name="rooms" id="rooms" class="form-control" placeholder="Enter total rooms" required>
+                <div id="error-message" style="color: red; display: none;">The total count of all room types must exactly match the total number of rooms.</div>
             </div>
         </div>
-        <!-- Bathrooms -->
-        <div class="col-lg-6">
-            <div class="form-group">
-                <label for="bathrooms">Number of Bathrooms</label>
-                <input maxlength="2" max="2" type="number" name="bathrooms"
-                    id="bathrooms" class="form-control" placeholder="Bathrooms" required>
-            </div>
+        <div class="col-lg-12 mt-3">
+            <h5>Select Room Types and Enter Their Counts</h5>
         </div>
-        <!-- Description -->
-        <div class="col-lg-12">
-            <div class="form-group">
-                <label for="description">Description</label>
-                <textarea name="description" id="description" class="form-control" placeholder="Tell more about your Property"
-                    rows="4" required></textarea>
+        {{-- @foreach ($roomTypes as $roomType)
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="roomType{{ $roomType->id }}" class="form-label">{{ $roomType->name }}</label>
+                    <input type="number" class="form-control" id="roomType{{ $roomType->id }}" 
+                           name="roomCounts[{{ $roomType->id }}]" placeholder="Enter count for {{ $roomType->name }}" 
+                           value="0" min="0">
+                </div>
             </div>
-        </div>
-        <!-- Status -->
-        {{-- <div class="col-lg-6">
-            <div class="form-group">
-                <label for="status">Status</label>
-                <select name="status" id="status" class="form-control" required>
-                    <option value="1">Active</option>
-                    <option value="0">Inactive</option>
-                </select>
-            </div>
-        </div> --}}
-        <!-- Maximum Persons -->
-        <div class="col-lg-6">
-            <div class="form-group">
-                <label for="max_persons">Maximum Persons</label>
-                <input type="number" name="max_persons" id="max_persons" class="form-control"
-                    placeholder="Maximum Persons" required>
-            </div>
-        </div>
-        <!-- View Side -->
-        <div class="col-lg-6">
-            <div class="form-group">
-                <label for="view_side">View Side</label>
-                <input type="text" name="view_side" id="view_side" class="form-control"
-                    placeholder="View Side" required>
-            </div>
-        </div>
+        @endforeach --}}
     </div>
+    
+
     <div class="d-flex justify-content-between mt-4">
-        <button type="button" class="btn btn-secondary" id="prevBtn"
-            onclick="nextPrev(-1)">Previous</button>
+        <button type="button" class="btn btn-secondary" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
         <button type="button" class="btn btn-primary" id="property_details_next">Next</button>
     </div>
 </div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        function validateTotalRooms() {
+            let totalRooms = parseInt($('#rooms').val()) || 0;
+            let totalSelectedRooms = 0;
+
+            $('input[name^="roomCounts"]').each(function() {
+                totalSelectedRooms += parseInt($(this).val()) || 0;
+            });
+
+            if (totalSelectedRooms !== totalRooms) {
+                $('#error-message').show();
+                return false;
+            } else {
+                $('#error-message').hide();
+            }
+            return true;
+        }
+
+        // Trigger validation only when changing room type counts
+        $('input[name^="roomCounts"]').on('input', function() {
+            validateTotalRooms();
+        });
+
+        // Trigger validation when navigating to the next step
+        $('#property_details_next').on('click', function() {
+            if (validateTotalRooms()) {
+                nextPrev(1);
+            }
+        });
+    });
+</script>

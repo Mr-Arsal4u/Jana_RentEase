@@ -1,6 +1,6 @@
 @extends('admin.layout.app')
-@section('content')
-    <div class="container">
+@section('content') 
+    <div class="container mt-3">
         <div class="row justify-content-end">
             <div class="col-auto">
                 <input type="date" onchange="propertyFilters()" class="form-control form-control-sm" name="from"
@@ -11,8 +11,8 @@
                     id="to_date">
             </div>
             <div class="col-auto">
-                <input type="search" name="property_name" id="property_name" oninput="propertyFilters()" class="form-control form-control-sm"
-                    placeholder="Search any property" id="searchProperty">
+                <input type="search" name="property_name" id="property_name" oninput="propertyFilters()"
+                    class="form-control form-control-sm" placeholder="Search any property" id="searchProperty">
             </div>
         </div>
     </div>
@@ -30,13 +30,15 @@
                             <table id="properties_table" class="table table-striped">
                                 <thead>
                                     <tr>
+                                        <th>Property No</th>
                                         <th>Property Name</th>
                                         <th>Description</th>
                                         <th>Location</th>
-                                        <th>Price</th>
+                                        <th>Total Rooms (R/C)</th>
                                         <th>Property Area</th>
                                         <th>City</th>
                                         <th>Zip Code</th>
+                                        <th>Application Status</th>
                                         <th>Status</th>
                                         <th>Created At</th>
                                         <th>Actions</th>
@@ -44,32 +46,13 @@
                                 </thead>
                                 <tbody id="properties_table_body">
                                     @forelse ($properties as $property)
-                                        <tr>    
-                                            <td>{{ $property->property_name }}</td>
-                                            <td class="color-primary">{{ $property->description }}</td>
-                                            <td>{{ $property->location }}</td>
-                                            </td>
-                                            <td>{{ $property->PropertyAmount->user_amount ?? '---' }},{{ $property->PropertyAmount->currency->code ?? 'none' }}
-                                            </td>
-                                            <td>{{ $property->area }} SQFT</td>
-                                            <td>{{ $property->city }}</td>
-                                            <td>{{ $property->zip_code }}</td>
-                                            <td><span class="badge badge-success px-2">Active</span>
-                                                {{-- <td>{{GeneralHelper::formatDate($property->created_at)}}</td> --}}
-                                            {{-- <td>{{ \App\Helpers\GeneralHelper::formatDate($property->created_at) }}</td> --}}
-                                            <td>{{$property->created_at->format('d F Y')}}</td>
-                                            <td><span><a href="#" data-toggle="tooltip" data-placement="top"
-                                                        title="" data-original-title="Edit"><i
-                                                            class="fa fa-pencil color-muted m-r-5"></i> </a><a
-                                                        href="#" data-toggle="tooltip" data-placement="top"
-                                                        title="" data-original-title="Close"><i
-                                                            class="fa fa-close color-danger"></i></a></span>
-                                            </td>
-                                        </tr>
+                                      @include('admin.property.table')
+                                        @include('admin.property.roomType-modal')
                                     @empty
-                                        <p >Nothing To See Here!</p>
+                                    <td colspan="12" class="text-center text-danger">
+                                        <b>No Record Found</b>
+                                    </td>
                                     @endforelse
-
                                 </tbody>
                             </table>
                         </div>

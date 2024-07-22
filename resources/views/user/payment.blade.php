@@ -183,89 +183,12 @@
             color: var(--grey);
         }
     </style>
-    <script src="https://js.stripe.com/v3/"></script>
-    <script>
-        // Create a Stripe client.
-        var stripe = Stripe(
-            'pk_test_51O9f5kDqybEGHe3SUIRpvzdWZGYIjYDYGyLmGYXCXBnPUcmI1VtgrUA5CiyzPUIJKMWikUUAgRVQ7JFJBuma4MdT00VCLHhrRH'
-            );
 
-        // Create an instance of Elements.
-        var elements = stripe.elements();
-
-        // Custom styling can be passed to options when creating an Element.
-        var style = {
-            base: {
-                color: '#32325d',
-                fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
-                fontSmoothing: 'antialiased',
-                fontSize: '16px',
-                '::placeholder': {
-                    color: '#aab7c4'
-                }
-            },
-            invalid: {
-                color: '#fa755a',
-                iconColor: '#fa755a'
-            }
-        };
-
-        // Create an instance of the card Element.
-        var card = elements.create('card', {
-            style: style
-        });
-
-        // Add an instance of the card Element into the `card-element` div.
-        card.mount('#card-element');
-
-        // Handle real-time validation errors from the card Element.
-        card.addEventListener('change', function(event) {
-            var displayError = document.getElementById('card-errors');
-            if (event.error) {
-                displayError.textContent = event.error.message;
-            } else {
-                displayError.textContent = '';
-            }
-        });
-
-        // Handle form submission.
-        var form = document.getElementById('payment-form');
-        form.addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            stripe.createToken(card).then(function(result) {
-                if (result.error) {
-                    // Inform the user if there was an error.
-                    var errorElement = document.getElementById('card-errors');
-                    errorElement.textContent = result.error.message;
-                } else {
-                    // Send the token to your server.
-                    stripeTokenHandler(result.token);
-                }
-            });
-        });
-
-        // Submit the form with the token ID.
-        function stripeTokenHandler(token) {
-            // Insert the token ID into the form so it gets submitted to the server
-            var form = document.getElementById('payment-form');
-            var hiddenInput = document.createElement('input');
-            hiddenInput.setAttribute('type', 'hidden');
-            hiddenInput.setAttribute('name', 'stripeToken');
-            hiddenInput.setAttribute('value', token.id);
-            form.appendChild(hiddenInput);
-
-            // Submit the form
-            form.submit();
-        }
-    </script>
-    
     <div id="page">
-
         <div id="main">
             <div class="product-container">
-                <h2>{{ $property->property_name }}<sup>x</sup></h2>
-                <img src="{{ asset(str_replace('public/', 'storage/', $property->images->first()->image)) }}" alt="">
+                <h2>{{ $booking->property->property_name }}<sup>x</sup></h2>
+                <img src="{{ asset(str_replace('public/', 'storage/', $booking->property->images->first()->image)) }}" alt="">
             </div>
             <div class="card">
                 <div class="chip">
@@ -278,35 +201,95 @@
                             fill="rgba(0,0,0,.4)" />
                     </svg>
                 </div>
-                <form action="{{ route('payment.store') }}" method="POST" id="payment-form">
+                <form action="{{route('payment.store')}}" method="POST" id="payment-form">
                     @csrf
-                    <input type="hidden" name="property_id" value="{{ $property->id }}">
                     <input type="hidden" name="booking_id" value="{{ $booking->id }}">
+                    <input type="hidden" id="amount" name="amount" value="{{ $booking->total_cost }}">
                     <label for="number">Card Number
-                        <input type="text" id="number" name="card_number" placeholder="0000 - 0000 - 0000 - 0000"
-                            required>
+                        <div id="card-number-element"></div>
                     </label>
                     <label for="name">Name
                         <input type="text" id="name" name="card_name" placeholder="John Doe" required>
                     </label>
                     <label for="date">Valid Thru
-                        <input type="text" id="date" name="valid_thru" placeholder="00/00" required>
+                        <div id="card-expiry-element"></div>
                     </label>
                     <label for="cvc">CVC
-                        <input type="text" id="cvc" name="cvc" placeholder="000" required>
+                        <div id="card-cvc-element"></div>
                     </label>
                     <button type="submit" id="submit-button">BUY NOW</button>
                     <label for="remember">Save my information for later
                         <input type="checkbox" id="remember" name="remember">
                     </label>
                 </form>
-
             </div>
             <div class="price-container">
-                <strong>{{ $property->PropertyAmount->total_amount }},{{ $property->PropertyAmount->currency->code }}</strong>
+                <strong>{{ $booking->total_cost }},{{ $booking->property->PropertyAmount->currency->code }}</strong>
                 <small>Inc tax</small>
             </div>
         </div>
     </div>
 
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var stripe = Stripe('pk_test_51O9f5kDqybEGHe3SUIRpvzdWZGYIjYDYGyLmGYXCXBnPUcmI1VtgrUA5CiyzPUIJKMWikUUAgRVQ7JFJBuma4MdT00VCLHhrRH'); // Replace with your Stripe public key
+            var elements = stripe.elements();
+
+            var style = {
+                base: {
+                    color: '#32325d',
+                    lineHeight: '18px',
+                    fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+                    fontSmoothing: 'antialiased',
+                    fontSize: '16px',
+                    '::placeholder': {
+                        color: '#aab7c4'
+                    }
+                },
+                invalid: {
+                    color: '#fa755a',
+                    iconColor: '#fa755a'
+                }
+            };
+
+            var cardNumberElement = elements.create('cardNumber', { style: style });
+            cardNumberElement.mount('#card-number-element');
+
+            var cardExpiryElement = elements.create('cardExpiry', { style: style });
+            cardExpiryElement.mount('#card-expiry-element');
+
+            var cardCvcElement = elements.create('cardCvc', { style: style });
+            cardCvcElement.mount('#card-cvc-element');
+
+            var form = document.getElementById('payment-form');
+
+            form.addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                stripe.createToken(cardNumberElement).then(function (result) {
+                    if (result.error) {
+                        // Inform the user if there was an error
+                        console.error(result.error.message);
+                    } else {
+                        // Send the token to your server
+                        stripeTokenHandler(result.token);
+                    }
+                });
+            });
+
+            function stripeTokenHandler(token) {
+                // Insert the token ID into the form so it gets submitted to the server
+                var form = document.getElementById('payment-form');
+                var hiddenInput = document.createElement('input');
+                hiddenInput.setAttribute('type', 'hidden');
+                hiddenInput.setAttribute('name', 'stripeToken');
+                hiddenInput.setAttribute('value', token.id);
+                form.appendChild(hiddenInput);
+
+                // Submit the form
+                form.submit();
+            }
+        });
+    </script>
 @endsection

@@ -8,8 +8,11 @@ use Illuminate\Http\Request;
 use App\Helpers\GeneralHelper;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PropertyRequest;
 use App\Models\Image;
 use App\Models\PropertyAmount;
+use App\Models\Room;
+use App\Models\RoomType;
 use App\Services\PropertyService;
 use Generator;
 
@@ -23,14 +26,25 @@ class PropertyController extends Controller
         $this->propertyService = $propertyService;
     }
 
-
     public function index()
     {
         $properties = $this->propertyService->getProperties(request());
         if (request()->ajax()) {
-            return response()->json($properties);
+            $properties_view = $this->propertyService->filterEachRecord($properties);
+            // $paginationHtml = GeneralHelper::GET_PAGINATION($properties);
+            return response()->json(
+                [
+                    'data' => $properties_view,
+                    'success' => true,
+                    // 'pagination' => $paginationHtml
+                ]
+            );
+            // dd($properties_view);
+            // return response()->json($properties);
         }
-        return view('admin.property.index', compact('properties'));
+        $leftRoomsCount = $this->propertyService->getLeftRoomsCount($properties);
+
+        return view('admin.property.index', compact('properties', 'leftRoomsCount'));
     }
 
     public function create()
@@ -38,39 +52,31 @@ class PropertyController extends Controller
         $property_no = GeneralHelper::GENERATE_APPLICATION_NUMBER();
         $amenities = $this->propertyService->getAmenities();
         $currencies = $this->propertyService->getCurrency();
-        return view('admin.property.create', compact('property_no', 'amenities', 'currencies'));
+        $roomTypes = $this->propertyService->getRoomTypes();
+        return view('admin.property.create', compact('property_no', 'amenities', 'currencies', 'roomTypes'));
     }
 
-
-    public function getAmenities()
-    {
-        $amenities = $this->propertyService->getAmenities();
-        return view('admin.amenities.index', compact('amenities'));
-    }
-
-    public function deleteAmenities($id)
-    {
-        return $this->propertyService->deleteAmenity($id);
-    }
-
-    public function saveAmenities(Request $request)
-    {
-        return $this->propertyService->createAmenity($request);
-    }
-
-    public function saveProperty(Request $request)
+    public function saveProperty(PropertyRequest $request)
     {
         $response =  $this->propertyService->saveProperty($request);
         return response()->json($response);
     }
 
-    public function savePropertyAmenities(Request $request)
+    public function saveRoomsCount(Request $request)
     {
-        // dd($request->all());
-        $response = $this->propertyService->savePropertyAmenities($request->property_no, $request->amenities);
+        $response = $this->propertyService->saveRoomsCount($request->property_no, $request->total_rooms, $request->room_counts);
         return response()->json($response);
     }
 
+    public function savePropertyAmenities(Request $request)
+    {
+        $request->validate([
+            'property_no' => 'required',
+            'amenities' => 'required'
+        ]);
+        $response = $this->propertyService->savePropertyAmenities($request->property_no, $request->amenities);
+        return response()->json($response);
+    }
 
     public function savePropertyImages(Request $request)
     {
@@ -78,15 +84,15 @@ class PropertyController extends Controller
         return response()->json($response);
     }
 
-    public function getFee(Request $request)
-    {
-        $response = $this->propertyService->getFee($request);
-        return response()->json($response);
-    }
-
     public function submitApplication(Request $request)
     {
         $response = $this->propertyService->submitApplication($request);
+        return response()->json($response);
+    }
+
+    public function delete($id)
+    {
+        $response = $this->propertyService->deleteProperty($id);
         return response()->json($response);
     }
 }

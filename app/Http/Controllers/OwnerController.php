@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Flasher\Laravel\Facade\Flasher;
 use Illuminate\Support\Facades\Auth;
 
 class OwnerController extends Controller
@@ -28,8 +29,10 @@ class OwnerController extends Controller
     {
         $credentials = $request->only('email', 'password');
         if (auth()->attempt($credentials)) {
+            Flasher::addSuccess('Login successful! Welcome to your dashboard.');
             return redirect()->route('owner.dashboard');
         }
-        return back()->withErrors('Invalid Credentials');
+        Flasher::addError('Invalid credentials. Please try again.');
+        return back();
     }
 }

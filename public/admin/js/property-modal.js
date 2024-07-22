@@ -10,7 +10,6 @@ function propertyModal(id) {
     });
 
     $.ajax({
-        
         url: window.location.href,
         method: "GET",
         data: { id: id },
@@ -26,9 +25,7 @@ function propertyModal(id) {
             $('#property-location').html('Location: ' + (response.property.location ? response.property.location : 'N/A') + ', Bedrooms: ' + (response.property.bedrooms ? response.property.bedrooms : 'N/A'));
             $('#property-bathroom-area').html('Bathrooms: ' + (response.property.bathrooms ? response.property.bathrooms : 'N/A') + ', Area: ' + (response.property.area ? response.property.area + ' sq ft' : 'N/A'))
             $('#property-max-view').html('Max Persons: ' + (response.property.max_persons ? response.property.max_persons : 'N/A') + ', View Side: ' + (response.property.view_side ? response.property.view_side : 'N/A'));
-            // $('#property-price').text('Price P/N: ' + response.property.property_amount.total_amount + response.property.property_amount.currency.code);
-            
-            
+            // $('#property-price').text('Price P/N: ' + response.property.property_amount.total_amount + response.property.property_amount.currency.code);   
             var amenitiesHtml = '';
             response.property.amenities.forEach(function(amenity, index) {
                 if (index % 2 === 0) {

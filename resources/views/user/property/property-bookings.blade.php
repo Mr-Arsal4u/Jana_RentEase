@@ -90,26 +90,30 @@
                     @endif
                 </div>
             </div>
-
-
         </div>
         <div class="container">
             <div class="row">
                 <!-- Property Details Section -->
                 <div class="col-md-6 mt-2">
                     <h2>Property Details</h2>
-                    <p>{{ $property->description }}</p>
-                    <p><strong>Price P/N:</strong> {{ $property->PropertyAmount->total_amount }}
-                        {{ $property->PropertyAmount->currency->code }}</p>
-                    <p>City: <strong>{{ $property->city }}</strong></p>
-                    <p>Country: <strong>{{ $property->country }}</strong></p>
-                    <p>View Side: <strong>{{ $property->view_side }}</strong></p>
-                    <p>Zip Code: <strong>{{ $property->zip_code }}</strong></p>
-                    <p>Bedrooms: <strong>{{ $property->bedrooms }}</strong></p>
-                    <p>Bathrooms: <strong>{{ $property->bathrooms }}</strong></p>
-                    <p>Property Area: <strong>{{ $property->area }} SQFT</strong> </p>
-                    <p>Max guests: <strong>{{ $property->max_persons }}</strong></p>
+                    <p>{{ $property->description ?? 'Description not available' }}</p>
+                    <p>Price P/N 1 Room:<strong>{{ $property->PropertyAmount->total_amount ?? 'Price not available' }}
+                            {{ optional($property->PropertyAmount->currency)->code ?? 'Currency not available' }}</strong>
+                    </p>
+                    <p>City: <strong>{{ $property->city ?? 'City not available' }}</strong></p>
+                    <p>Country: <strong>{{ $property->country ?? 'Country not available' }}</strong></p>
+                    <p>View Side: <strong>{{ $property->view_side ?? 'View side not available' }}</strong></p>
+                    <p>Zip Code: <strong>{{ $property->zip_code ?? 'Zip code not available' }}</strong></p>
+                    <p>Bedrooms: <strong>{{ $property->bedrooms ?? 'Bedrooms not available' }}</strong></p>
+                    <p>Bathrooms: <strong>{{ $property->bathrooms ?? 'Bathrooms not available' }}</strong></p>
+                    <p>Total Rooms: <strong>{{ $property->total_rooms ?? 'Total rooms not available' }}</strong></p>
+                    <p>Property Area:
+                        <strong>{{ $property->area ? $property->area . ' SQFT' : 'Property area not available' }}</strong>
+                    </p>
+                    <p>Max guests in one room: <strong>{{ $property->max_persons ?? 'Max guests not available' }}</strong>
+                    </p>
                 </div>
+
 
                 <!-- Form Section -->
                 <div class="col-md-6 mt-2">
@@ -140,23 +144,32 @@
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="adults">Number of Adults</label>
-                                <input type="number" class="form-control glow" id="adults" name="adults" required>
+                                <input type="number" class="form-control glow" id="adults" name="adults" max="0"
+                                    required>
+                                <div id="guests-error" style="color: red; display: none;"></div>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="children">Number of Children</label>
-                                <input type="number" class="form-control glow" id="children" name="children">
+                                <input type="number" class="form-control glow" id="children" max="0"
+                                    name="children">
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="arrival_time">Arrival Time</label>
-                            <input type="time" class="form-control glow" id="arrival_time" name="arrival_time">
-                        </div>
-                        <!-- Uncomment this section if rooms field is needed in future
-                            <div class="form-group">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="arrival_time">Arrival Time</label>
+                                <input type="time" class="form-control glow" id="arrival_time" name="arrival_time">
+
+                            </div>
+                            <div class="form-group col-md-6">
                                 <label for="rooms">Rooms</label>
-                                <input type="number" class="form-control glow" id="rooms" name="rooms">
+                                <input type="number" class="form-control glow" id="rooms" name="rooms_booked">
+                                <div id="rooms-error" style="color: red; display: none;"></div>
                             </div>
-                            -->
+                        </div>
+                        {{-- <div class="form-group">
+                          
+                            </div> --}}
+
                         <button type="submit" class="btn btn-primary">Book Now</button>
                     </form>
                 </div>
@@ -168,12 +181,19 @@
             <h2>Facilities</h2>
             <div id="amenities" class="amenities">
                 <ul class="amenities-list">
-                    @foreach ($property->amenities as $amenity)
+                    @forelse ($property->amenities as $amenity)
                         <li>
                             <span class="amenity-name">{{ $amenity->name }}</span>
                             <span class="amenity-description">({{ $amenity->description }})</span>
                         </li>
-                    @endforeach
+                    @empty
+
+                        <p>
+                            No amenities found.
+                        </p>
+                    @endforelse
+
+
                 </ul>
 
             </div>
@@ -215,9 +235,36 @@
             $('#checkout').attr('min', checkInDate);
         });
 
-        // If check-in date is set, ensure the check-out date is after the check-in date
         if ($('#checkin').val()) {
             $('#checkout').attr('min', $('#checkin').val());
         }
+
+
+        $('#rooms').on('change', function() {
+            var selectedRooms = parseInt($(this).val());
+            var totalRooms = parseInt('{{ $property->total_rooms }}');
+            $('#adults').attr('max', selectedRooms);
+            $('#children').attr('max', selectedRooms);
+
+            if (selectedRooms > totalRooms) {
+                $('#rooms-error').text('Selected rooms cannot exceed total rooms available').show();
+            } else {
+                $('#rooms-error').hide();
+            }
+        });
+
+        $('#adults, #children').on('input', function() {
+            var adults = parseInt($('#adults').val());
+            var children = parseInt($('#children').val());
+            var maxPersons = parseInt('{{ $property->max_persons }}');
+
+            if (adults + children > maxPersons) {
+                $('#guests-error').text(
+                        'Total number of guests (adults + children) cannot exceed maximum allowed')
+                    .show();
+            } else {
+                $('#guests-error').hide();
+            }
+        });
     });
 </script>

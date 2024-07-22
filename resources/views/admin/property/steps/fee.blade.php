@@ -29,7 +29,6 @@
         vertical-align: middle;
     }
 </style>
-
 <div class="step" id="step5">
     <h3 class="mb-3">Step 5</h3>
     <div class="row g-3">

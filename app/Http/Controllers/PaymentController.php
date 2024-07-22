@@ -14,32 +14,35 @@ use Illuminate\Support\Facades\Log;
 
 class PaymentController extends Controller
 {
-    public function payment($property_id, $booking_id)
+    public function payment($booking_id)
     {
         // dd('here');
-        $property = Property::with('images')->find($property_id);
-        $booking = Booking::find($booking_id);
+        // $property = Property::with('images','bookings')->find($property_id);
+        $booking = Booking::with('property','user')->find($booking_id);
         // dd($property);
 
-        return view('user.payment', compact('property', 'booking'));
+        return view('user.payment', compact('booking'));
         // return view('user.email.test-pay');
     }
 
     public function createPayment(Request $request)
     {
+        // dd($request->all());
+        // dd($request->amount);
         try {
             // dd($request->stripeToken);
-            \Stripe\Stripe::setApiKey('STRIPE_SECRET');
+            \Stripe\Stripe::setApiKey('sk_test_51O9f5kDqybEGHe3Sv9IImXmERokwaG2PwZsnIBYqFZUstVCvg8Ldarmu9fs9lA83a3loA7JPNsQYw4qRGCpZxzgG00YQfEkYCg');
 
             $charge = \Stripe\Charge::create([
-                'amount' => 1000, 
+                'amount' => $request->amount * 100, 
                 'currency' => 'usd',
                 'description' => 'Example charge',
-                'source' => 'tok_visa', // $request->stripeToken,
+                'source' =>  $request->stripeToken,
             ]);
             return redirect()->route('index')->with('success', 'Payment successful!');
             // return response()->json(['success' => true, 'message' => 'Payment processed successfully']);
         } catch (\Exception $e) {
+            Log::error($e->getMessage());
             return back()->withErrors(['message' => 'Failed to process payment.']);
             // return response()->json(['success' => false, 'message' => $e->getMessage()]);
         }
