@@ -26,8 +26,11 @@
 
         <form id="roomForm" action="{{ route('room.create') }}" method="POST" style="display:none;">
             @csrf
-            <input type="hidden" name="property_id" id="property_id" value="{{ $property->id }}">
-        </form>
+            {{-- <input type="hidden" name="property_id" id="property_id" value="{{ $property->id }}">
+             --}}
+             <input type="hidden" name="property_id" id="property_id" value="{{ $property->id }}">
+
+            </form>
 
     @empty
         <p>No Room Types exist !</p>

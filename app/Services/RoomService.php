@@ -8,7 +8,9 @@ use App\Models\Property;
 use App\Models\RoomType;
 use App\Helpers\GeneralHelper;
 use App\Models\PropertyAmount;
+use App\Services\PropertyService;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Request;
 
 class RoomService
 {
@@ -19,22 +21,94 @@ class RoomService
         $this->propertyService = $propertyService;
     }
 
+    public function getAllRooms($propertyId = null)
+    {
+        // dd(request()->all());
+        // dd($propertyId);
+        $query = Room::ApplyFilter(request()->only(['from', 'to', 'room_no', 'roomType']))->with('property', 'roomType');
+
+        if ($propertyId) {
+            $query->where('property_id', $propertyId);
+        }
+        return $query->get();
+        // dd($room);
+    }
+
+    // public function getPropertyRooms($propertyId)
+    // {
+    //     // dd($propertyId);
+    //     $query = Room::ApplyFilter(request()->only(['from', 'to', 'room_no', 'roomType']))->with('property', 'roomType');
+
+    //     if ($propertyId) {
+    //         $query->where('property_id', $propertyId);
+    //     }
+    //     return $query->get();
+    // }
+
     public function getRoom($roomNo)
     {
-        return Room::where('room_no', $roomNo)->with('property', 'roomType', 'roomAmount')->first();
+        return Room::where('room_no', $roomNo)->with('property', 'roomType')->first();
     }
 
     public function rooms($id)
     {
         try {
-            $property = Property::find($id);
+            // dd($id);
+            if (!$id) {
+                return response()->json(['error' => 'Property not found'], 404);
+            }
+            // $rooms = $this->getAllRooms(request())->where('property_id', $id);
+            $rooms = $this->getAllRooms($id);
+            // dd($rooms);
+            $property = $this->propertyService->getProperties()->where('id', $id)->first();
             $roomTypes = RoomType::all();
-            return view('admin.property.room.rooms', compact('property', 'roomTypes'));
+            // dd($roomTypes);
+            if (request()->ajax()) {
+                $rooms_view = $this->filterEachRecord($rooms);
+                return response()->json([
+                    'data' => $rooms_view,
+                    'success' => true,
+                    // 'pagination' => $paginationHtml
+                ]);
+            }
+
+            return view('admin.property.room.rooms', compact('rooms', 'roomTypes', 'property'));
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return back()->with('error', 'An error occurred while fetching properties');
         }
     }
+
+    public function filterEachRecord($rooms)
+    {
+        $rooms_view = '';
+        if ($rooms->count() > 0) {
+            foreach ($rooms as $room) {
+                $view = (string)view('admin.property.room.room_tr', compact('room'));
+                $rooms_view = $rooms_view . $view;
+            }
+        } else {
+            $view = (string)view('admin.property.room.room_tr');
+            $rooms_view = $rooms_view . $view;
+        }
+        return $rooms_view;
+    }
+    // {
+    //     // dd($property);
+    //     $rooms_view = '';
+    //     if ($property->count() > 0) {
+    //         // dd('here');
+    //         foreach ($property->rooms as $room) {
+    //             // dd($room);
+    //             $view = (string)view('admin.property.room.room_tr', compact('room'));
+    //             $rooms_view = $rooms_view . $view;
+    //         }
+    //     } else {
+    //         $view = (string)view('admin.property.room.room_tr');
+    //         $rooms_view = $rooms_view . $view;
+    //     }
+    //     return $rooms_view;
+    // }
 
     public function store($request)
     {

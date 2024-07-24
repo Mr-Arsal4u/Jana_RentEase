@@ -1,6 +1,17 @@
 $(document).ready(function () {
+
+    $('#add_room_type').on('click', function(event) {
+        console.log('here');
+        event.preventDefault(); // Prevent the default action if necessary
+        // const dataId = $(this).data('id');
+        const dataId = $(this).attr('data-id');
+        console.log(dataId);
+    });
+
     $('#addRoomsTypeForm').on('submit', function (e) {
         e.preventDefault();
+
+
 
         // let roomsCount = $('#rooms_count').val();
         // let leftRoomsCount = leftRoomsCounts;
@@ -41,8 +52,8 @@ $(document).ready(function () {
                     });
                 }
             },
-            error: function (jqXHR ,error,response) {
-                
+            error: function (jqXHR, error, response) {
+
                 console.log(jqXHR);
                 toastr.error(jqXHR.responseJSON.message, 'Error', {
                     "closeButton": true,

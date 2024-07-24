@@ -32,13 +32,11 @@ class PropertyController extends Controller
         if (request()->ajax()) {
             $properties_view = $this->propertyService->filterEachRecord($properties);
             // $paginationHtml = GeneralHelper::GET_PAGINATION($properties);
-            return response()->json(
-                [
-                    'data' => $properties_view,
-                    'success' => true,
-                    // 'pagination' => $paginationHtml
-                ]
-            );
+            return response()->json([
+                'data' => $properties_view,
+                'success' => true,
+                // 'pagination' => $paginationHtml
+            ]);
             // dd($properties_view);
             // return response()->json($properties);
         }

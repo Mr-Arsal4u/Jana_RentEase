@@ -37,7 +37,7 @@
                 <i class="fa fa-list color-info m-r-5"></i> View Room Types
             </a>
             {{-- <div role="separator" class="dropdown-divider"></div> --}}
-            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#addRoomsTypeModal">
+            <a class="dropdown-item" id="add_room_type" href="#" data-toggle="modal" data-id="{{$property->id}}" data-target="#addRoomsTypeModal">
                 <i class="fa fa-plus color-success m-r-5"></i> Add Rooms Type
             </a>
         </div>

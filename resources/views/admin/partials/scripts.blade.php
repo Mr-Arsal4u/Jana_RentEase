@@ -48,7 +48,7 @@
 <script src="{{ asset('admin/js/step-form.js') }}"></script>
 
 <!-- Admin Filters -->
-<script src="{{ asset('admin/js/admin-filters.js') }}"></script>
+<script src="{{ asset('js/super_admin/admin-filters.js') }}"></script>
 
 <!-- CKEditor -->
 <script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>

@@ -1,5 +1,5 @@
 @extends('admin.layout.app')
-@section('content') 
+@section('content')
     <div class="container mt-3">
         <div class="row justify-content-end">
             <div class="col-auto">
@@ -10,9 +10,9 @@
                 <input type="date" onchange="propertyFilters()" class="form-control form-control-sm" name="to"
                     id="to_date">
             </div>
-            <div class="col-auto">
+            <div class="col-auto col-sm-3">
                 <input type="search" name="property_name" id="property_name" oninput="propertyFilters()"
-                    class="form-control form-control-sm" placeholder="Search any property" id="searchProperty">
+                    class="form-control form-control-sm" placeholder="Search By No, Name or city" id="searchProperty">
             </div>
         </div>
     </div>
@@ -44,14 +44,14 @@
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
+                                @include('admin.property.roomType-modal')
                                 <tbody id="properties_table_body">
                                     @forelse ($properties as $property)
-                                      @include('admin.property.table')
-                                        @include('admin.property.roomType-modal')
+                                        @include('admin.property.table')
                                     @empty
-                                    <td colspan="12" class="text-center text-danger">
-                                        <b>No Record Found</b>
-                                    </td>
+                                        <td colspan="12" class="text-center text-danger">
+                                            <b>No Record Found</b>
+                                        </td>
                                     @endforelse
                                 </tbody>
                             </table>

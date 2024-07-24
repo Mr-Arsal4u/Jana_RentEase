@@ -45,7 +45,7 @@ class Property extends Model
     public function scopeSearch($query, $s)
     {
         return $query->where('property_name', 'like', '%' . $s . '%')
-            ->orWhere('city', 'like', '%' . $s . '%');
+            ->orWhere('city', 'like', '%' . $s . '%')->orWhere('property_no', 'like', '%' . $s . '%');
     }
 
     public function scopeApplyFilter($query, $filters)
