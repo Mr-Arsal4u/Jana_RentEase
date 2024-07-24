@@ -11,10 +11,10 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <input type="hidden" name="property_id" value="{{ $property->id }}">
+                    {{-- <input type="hidden" name="property_id" value="{{ $property->id }}"> --}}
                     <div class="form-group">
                         <div class="d-flex justify-content-between mb-4">
-                            <span> Total Rooms : <b> {{ $property->total_rooms ?? 'no rooms' }} </b> </span>
+                            <span> Total Rooms of property : <b id="property_rooms_count" > {{ $property->total_rooms ?? 'no rooms' }} </b> </span>
                             {{-- <span > Rooms left for Room Type : <b id="roomTypeCount" > {{ $leftRoomsCount  ?? '0'}}</b> </span> --}}
                         </div>
                         <label for="room_type_name">Room Type Name</label>

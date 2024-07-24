@@ -29,14 +29,8 @@ class RoomController extends Controller
 
     public function rooms($id)
     {
-        try {
-            $property = Property::find($id);
-            $roomTypes = RoomType::all();
-            return view('admin.property.room.rooms', compact('property', 'roomTypes'));
-        } catch (\Exception $e) {
-            Log::error($e->getMessage());
-            return back()->with('error', 'An error occurred while fetching properties');
-        }
+        // dd($id);
+        return $this->roomService->rooms($id);
     }
 
     public function create(Request $request)
@@ -45,11 +39,6 @@ class RoomController extends Controller
         try {
             // dd('heer');
             $property = Property::find($request->property_id);
-            // $property = Property::with('room')->get();
-            // dd($property);
-            // $roomType = RoomType::with('rooms')->get();
-            // $roomType = RoomType::find($request->roomId);
-            // dd($roomType);
             $room_no = GeneralHelper::ROOM_NO('RN-');
             // dd($room_no);
             $currencies = Currency::all();
@@ -101,7 +90,7 @@ class RoomController extends Controller
             // dd($properties);
             $leftRoomsCount = $this->propertyService->getLeftRoomsCount($properties);
             // dd($leftRoomsCount);
-            return view('admin.property.room.room-types', compact('roomTypes', 'property','leftRoomsCount'));
+            return view('admin.property.room.room-types', compact('roomTypes', 'property', 'leftRoomsCount'));
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return back()->with('error', 'An error occurred while fetching room types');
