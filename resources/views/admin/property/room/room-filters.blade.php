@@ -3,7 +3,7 @@
         <div class="col-auto">
             <select onchange="roomFilters()" class="form-control" name="room_type" id="room_type">
                 <option value="">Select Room Type</option>
-                @forelse($roomTypes as $roomType)
+                @forelse($property->roomTypes as $roomType)
                     <option value="{{ $roomType->id }}">{{ $roomType->name }}</option>
                 @empty
                     <option value="">No room types available</option>
