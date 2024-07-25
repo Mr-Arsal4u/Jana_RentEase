@@ -62,17 +62,3 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-{{-- <script>
-    $(document).ready(function() {
-        $('#addRoomButton').click(function() {
-            $('#roomContainer').fadeIn('fast');
-        });
-
-        $(document).mouseup(function(e) {
-            var container = $("#roomContainer");
-            if (!container.is(e.target) && container.has(e.target).length === 0) {
-                container.fadeOut('fast');
-            }
-        });
-    });
-</script> --}}

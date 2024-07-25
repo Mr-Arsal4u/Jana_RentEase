@@ -246,6 +246,7 @@ class RoomService
     public function addRoomsType($request)
     {
         try {
+            // dd($request->all());
 
             // if ($request->room_type_name == null || $request->room_type_description == null) {
             //     return response()->json(['status' => 'error', 'message' => 'Please fill all fields'], 422);

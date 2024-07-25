@@ -1,11 +1,17 @@
 $(document).ready(function () {
 
-    $('#add_room_type').on('click', function(event) {
-        console.log('here');
+    $('.add_room_type').on('click', function(event) {
+        // alert('here');
+        // console.log('here');
         event.preventDefault(); // Prevent the default action if necessary
         // const dataId = $(this).data('id');
-        const dataId = $(this).attr('data-id');
+        // const dataId = $(this).attr('data-id');
+        const totalRooms = $(this).attr('data-total-rooms');
+        const dataId=$(this).attr('data-id');
         console.log(dataId);
+        console.log(totalRooms);
+        $("#property_id").val(dataId);
+        $('#property_rooms_count').text(totalRooms);
     });
 
     $('#addRoomsTypeForm').on('submit', function (e) {

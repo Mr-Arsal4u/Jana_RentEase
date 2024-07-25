@@ -37,14 +37,13 @@
                 <i class="fa fa-list color-info m-r-5"></i> View Room Types
             </a>
             {{-- <div role="separator" class="dropdown-divider"></div> --}}
-            <a class="dropdown-item" id="add_room_type" href="#" data-toggle="modal" data-id="{{$property->id}}" data-target="#addRoomsTypeModal">
+            <a class="dropdown-item add_room_type"  href="#" data-toggle="modal" data-id="{{$property->id}}" data-total-rooms="{{$property->total_rooms}}"  data-target="#addRoomsTypeModal">
                 <i class="fa fa-plus color-success m-r-5"></i> Add Rooms Type
             </a>
         </div>
     </td>
 </tr>
 @else
-    
 <tr>
     <td colspan="12" class="text-center text-danger">
         <b>No Record Found</b>
