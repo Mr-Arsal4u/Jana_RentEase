@@ -73,6 +73,7 @@ class RoomController extends Controller
 
     public function addRoomsType(RoomTypeRequest $request)
     {
+        // dd($request);
         return $this->roomService->addRoomsType($request);
     }
 
